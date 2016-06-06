@@ -91,7 +91,7 @@ WHEN [Line_item] like '%house%' THEN  'ROS'
 WHEN [Line_item] like '%targeting%' THEN  'RON'
 WHEN [Order] like '%appnexus%' OR [Order] like '%google%' OR [Order] like '%rubicon%' THEN  'RON'
 WHEN [Order] like '%house%' THEN  'ROS'
-ELSE 'Unknown' END AS [CamTypeID],
+ELSE 'Unknown' END AS [CamTypeNAME],
 
 //[CamTypeID]
 CASE WHEN [Line_item] like '%- ron %' THEN  3
