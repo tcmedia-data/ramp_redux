@@ -42,6 +42,15 @@ SELECT
 [Ad_server_CPD_revenue_CA],
 
 //---------------------------------------------
+//New column [PlatformNAME]
+CASE WHEN [Advertiser] = 'appnexus - remnant' THEN 'APPNexus'
+WHEN [Advertiser] = 'google - remnant' THEN 'Google'
+WHEN [Advertiser] = 'liverail' THEN 'LiveRail'
+WHEN [Advertiser] = 'rubicon - remnant' THEN 'Rubicon'
+WHEN [Advertiser] = 'lkqd' THEN 'Lkqd'
+WHEN [Advertiser] = 'sm [dfp]' THEN 'SM [DFP]'
+ELSE 'DFP' END AS [PlatformNAME], 
+
 //New column [PlatformID]
 CASE WHEN [Advertiser] = 'appnexus - remnant' THEN 2
 WHEN [Advertiser] = 'google - remnant' THEN 3
@@ -51,16 +60,39 @@ WHEN [Advertiser] = 'lkqd' THEN 6
 WHEN [Advertiser] = 'sm [dfp]' THEN 7
 ELSE 1 END AS [PlatformID],  
 
+//---------------------------------------------
+//[axLineItemTypeNAME]
+'Unknown' AS [axLineItemTypeNAME],
+
 //[axLineItemTypeID]
 99 AS [axLineItemTypeID],
 
+//---------------------------------------------
+//[axImpTypeNAME]
+'Unknown' AS [axImpTypeNAME],
+
 //[axImpTypeID]
 99 AS [axImpTypeID],
+
+//---------------------------------------------
+//[axMediaTypeNAME]
+'Unknown' AS [axMediaTypeNAME],
 
 //[axMediaTypeID]
 99 AS [axMediaTypeID],
 
 //---------------------------------------------
+//[CamTypeNAME]
+CASE WHEN [Line_item] like '%- ron %' THEN  'RON'
+WHEN [Line_item] like '%- roc %' THEN  'ROC'
+WHEN [Line_item] like '%- ros %' THEN  'ROS'
+WHEN [Line_item] like '%sponsorship%' THEN  'ROS'
+WHEN [Line_item] like '%house%' THEN  'ROS'
+WHEN [Line_item] like '%targeting%' THEN  'RON'
+WHEN [Order] like '%appnexus%' OR [Order] like '%google%' OR [Order] like '%rubicon%' THEN  'RON'
+WHEN [Order] like '%house%' THEN  'ROS'
+ELSE 'Unknown' END AS [CamTypeID],
+
 //[CamTypeID]
 CASE WHEN [Line_item] like '%- ron %' THEN  3
 WHEN [Line_item] like '%- roc %' THEN  2
@@ -73,14 +105,23 @@ WHEN [Order] like '%house%' THEN  1
 ELSE 99 END AS [CamTypeID],
 
 //---------------------------------------------
+//New column [RevTypeNAME]
+'Unknown' AS [RevTypeNAME],
+
 //New column [RevTypeID]
 99 AS [RevTypeID],
 
 //---------------------------------------------
+//New column [ManagedNAME]
+'Unknown' AS [ManagedNAME],
+
 //New column [ManagedID]
 99 AS [ManagedID],
 
 //---------------------------------------------
+//New column [AdTypeNAME]
+'Unknown' AS [AdTypeNAME],
+
 //New column [AdTypeID]
 99 AS [AdTypeID],
 
