@@ -137,12 +137,12 @@ ELSE 3 END AS [RevTypeID],
 
 //---------------------------------------------
 //New column [ManagedNAME]
-//CASE WHEN [media_type] = 'video' THEN 'Unknown'  
-//WHEN [line_item_type] = 'remnant' OR [payment_type] like '%revshare%' THEN 'Remnant'
-//WHEN [line_item_type] = 'ssp' OR [line_item_name] like '%twig%' THEN 'SSP'
-//WHEN [imp_type] = 'psa' OR [imp_type] = 'default' THEN 'House'  
-//WHEN [imp_type] = 'resold' THEN 'Unknown'   
-//ELSE 'Direct' END AS [ManagedNAME],
+CASE WHEN [media_type] = 'video' THEN 'Unknown'  
+WHEN [line_item_type] = 'remnant' OR [payment_type] like '%revshare%' THEN 'Remnant'
+WHEN [line_item_type] = 'ssp' OR [line_item_name] like '%twig%' THEN 'SSP'
+WHEN [imp_type] = 'psa' OR [imp_type] = 'default' THEN 'House'  
+WHEN [imp_type] = 'resold' THEN 'Unknown'   
+ELSE 'Direct' END AS [ManagedNAME],
 
 //New column [ManagedID]
 CASE WHEN [media_type] = 'video' THEN 99 
