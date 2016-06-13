@@ -71,7 +71,7 @@ FROM (
       INTEGER(AdTypeID) AS AdTypeID,
       AdTypeNAME,
       FLOAT(TechFee) AS TechFee
-    FROM (TABLE_DATE_RANGE( ManagedServicesProcessed.DFP_GENERAL_, TIMESTAMP('2016-03-01'), TIMESTAMP('2016-03-01')))),
+    FROM (TABLE_DATE_RANGE( ManagedServicesProcessed.DFP_GENERAL_, TIMESTAMP('2016-03-01'), TIMESTAMP('2016-03-31')))),
     (
     SELECT
       *
@@ -139,5 +139,5 @@ FROM (
       INTEGER(AdTypeID) AS AdTypeID,
       AdTypeNAME,
       FLOAT(TechFee) AS TechFee
-      FROM (TABLE_DATE_RANGE( ManagedServicesProcessed.APPNEXUS_NETWORK_, TIMESTAMP('2016-03-01'), TIMESTAMP('2016-03-01'))) ) ))
+      FROM (TABLE_DATE_RANGE( ManagedServicesProcessed.APPNEXUS_NETWORK_, TIMESTAMP('2016-03-01'), TIMESTAMP('2016-03-31'))) ) ))
 //LIMIT 10
