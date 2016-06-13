@@ -1,3 +1,7 @@
+#BigQuery Union of ManagedServicesProcessed.DFP_GENERAL_20160301 & ManagedServicesProcessed.APPNEXUS_NETWORK_20160301
+#Date: 20160312 
+#See companion queries: 
+
 SELECT
   *
 FROM (
