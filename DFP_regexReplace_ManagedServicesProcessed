@@ -13,19 +13,19 @@ Advertiser,
 Order AS OrderName,
 Salesperson,
 Line_item,
-Ad_unit_ID,
-Advertiser_ID,
-Order_ID,
-Salesperson_ID,
-Line_item_ID,
+INTEGER(Ad_unit_ID) AS Ad_unit_ID,
+INTEGER(Advertiser_ID) AS Advertiser_ID,
+INTEGER(Order_ID) AS Order_ID,
+INTEGER(Salesperson_ID) AS Salesperson_ID,
+INTEGER(Line_item_ID) AS Line_item_ID,
 //
-DATE(TIMESTAMP(REGEXP_EXTRACT(REPLACE(REPLACE(Order_start_date,'-',''),'Unlimited',''), '.*/([0-9]{4})$')  + '-' + 
+DATE(TIMESTAMP(DATE(TIMESTAMP(REGEXP_EXTRACT(REPLACE(REPLACE(Order_start_date,'-',''),'Unlimited',''), '.*/([0-9]{4})$')  + '-' + 
     LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Order_start_date,'-',''),'Unlimited',''), '^([0-9]{1,2}).*'),2,'0')  + '-' +
-    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Order_start_date,'-',''),'Unlimited',''), '.*/([0-9]{1,2})/.*'),2,'0'))) AS Order_start_date,
+    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Order_start_date,'-',''),'Unlimited',''), '.*/([0-9]{1,2})/.*'),2,'0'))))) AS Order_start_date,
 //
-DATE(TIMESTAMP(REGEXP_EXTRACT(REPLACE(REPLACE(Order_end_date,'-',''),'Unlimited',''), '.*/([0-9]{4})$')  + '-' + 
+DATE(TIMESTAMP(DATE(TIMESTAMP(REGEXP_EXTRACT(REPLACE(REPLACE(Order_end_date,'-',''),'Unlimited',''), '.*/([0-9]{4})$')  + '-' + 
     LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Order_end_date,'-',''),'Unlimited',''), '^([0-9]{1,2}).*'),2,'0')  + '-' +
-    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Order_end_date,'-',''),'Unlimited',''), '.*/([0-9]{1,2})/.*'),2,'0'))) AS Order_end_date,
+    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Order_end_date,'-',''),'Unlimited',''), '.*/([0-9]{1,2})/.*'),2,'0'))))) AS Order_end_date,
 Order_PO_number,
 Agency,
 Trafficker,
@@ -33,31 +33,31 @@ Secondary_traffickers,
 Delivery_pacing,
 Frequency_cap,
 //
-DATE(TIMESTAMP(REGEXP_EXTRACT(REPLACE(REPLACE(Line_item_start_date,'-',''),'Unlimited',''), '.*/([0-9]{4})$')  + '-' + 
+DATE(TIMESTAMP(DATE(TIMESTAMP(REGEXP_EXTRACT(REPLACE(REPLACE(Line_item_start_date,'-',''),'Unlimited',''), '.*/([0-9]{4})$')  + '-' + 
     LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Line_item_start_date,'-',''),'Unlimited',''), '^([0-9]{1,2}).*'),2,'0')  + '-' +
-    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Line_item_start_date,'-',''),'Unlimited',''), '.*/([0-9]{1,2})/.*'),2,'0'))) AS  Line_item_start_date,
+    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Line_item_start_date,'-',''),'Unlimited',''), '.*/([0-9]{1,2})/.*'),2,'0'))))) AS  Line_item_start_date,
 //    
-DATE(TIMESTAMP(REGEXP_EXTRACT(Line_item_end_date, '.*/([0-9]{4})$')  + '-' + 
+DATE(TIMESTAMP(DATE(TIMESTAMP(REGEXP_EXTRACT(Line_item_end_date, '.*/([0-9]{4})$')  + '-' + 
     LPAD(REGEXP_EXTRACT(Line_item_end_date, '^([0-9]{1,2}).*'),2,'0')  + '-' +
-    LPAD(REGEXP_EXTRACT(Line_item_end_date, '.*/([0-9]{1,2})/.*'),2,'0'))) AS Line_item_end_date,
+    LPAD(REGEXP_EXTRACT(Line_item_end_date, '.*/([0-9]{1,2})/.*'),2,'0'))))) AS Line_item_end_date,
 Cost_type,
-REPLACE(Rate_CA,'CA$','') AS Rate_CA,
-REPLACE(REPLACE(Goal_quantity,'-',''),'N/A','') AS Goal_quantity,
-REPLACE(Line_item_lifetime_impressions,'-','') AS Line_item_lifetime_impressions,
-REPLACE(Line_item_lifetime_clicks,'-','') AS Line_item_lifetime_clicks,
-REPLACE(REPLACE(Line_item_priority,'-',''),'N/A','') AS Line_item_priority, 
-REPLACE(Contracted_quantity,'-','') AS Contracted_quantity,
-REPLACE(Discount,'-','') AS Discount,
-REPLACE (Booked_revenue_exclude_CPD_CA,'CA$','') AS Booked_revenue_exclude_CPD_CA,
+FLOAT(REPLACE(Rate_CA,'CA$','')) AS Rate_CA,
+INTEGER(REPLACE(REPLACE(Goal_quantity,'-',''),'N/A','')) AS Goal_quantity,
+INTEGER(REPLACE(Line_item_lifetime_impressions,'-','')) AS Line_item_lifetime_impressions,
+INTEGER(REPLACE(Line_item_lifetime_clicks,'-','')) AS Line_item_lifetime_clicks,
+INTEGER(REPLACE(REPLACE(Line_item_priority,'-',''),'N/A','')) AS Line_item_priority, 
+INTEGER(REPLACE(Contracted_quantity,'-','')) AS Contracted_quantity,
+FLOAT(REPLACE(Discount,'-','')) AS Discount,
+FLOAT(REPLACE (Booked_revenue_exclude_CPD_CA,'CA$','')) AS Booked_revenue_exclude_CPD_CA,
 Name_Comments,
 Audience_Segment,
-Total_impressions,
-Total_clicks,
-REPLACE (Total_CPM_and_CPC_revenue_CA,'CA$','') AS Total_CPM_and_CPC_revenue_CA,
-REPLACE(REPLACE(Delivery_indicator,'-',''),'N/A','') AS Delivery_indicator,
-Total_Active_View_eligible_impressions,
-Total_Active_View_viewable_impressions,
-REPLACE (Ad_server_CPD_revenue_CA,'CA$','') AS Ad_server_CPD_revenue_CA,
+INTEGER(Total_impressions) AS Total_impressions,
+INTEGER(Total_clicks) AS Total_clicks,
+FLOAT(REPLACE (Total_CPM_and_CPC_revenue_CA,'CA$','')) AS Total_CPM_and_CPC_revenue_CA,
+FLOAT(REPLACE(REPLACE(Delivery_indicator,'-',''),'N/A','')) AS Delivery_indicator,
+INTEGER(Total_Active_View_eligible_impressions) AS Total_Active_View_eligible_impressions,
+INTEGER(Total_Active_View_viewable_impressions) AS Total_Active_View_viewable_impressions,
+FLOAT(REPLACE (Ad_server_CPD_revenue_CA,'CA$','')) AS Ad_server_CPD_revenue_CA,
 //
 CASE WHEN Advertiser = 'appnexus - remnant' THEN 'APPNexus'
 WHEN Advertiser = 'google - remnant' THEN 'Google'
@@ -106,13 +106,11 @@ ELSE 99 END AS CamTypeID,
 99 AS ManagedID,
 'Unknown' AS AdTypeNAME,
 99 AS AdTypeID,
-0 AS TechFee
+FLOAT(0.00) AS TechFee
 
-FROM ManagedServices.DFP_General_20160601
+FROM ManagedServices.DFP_General_20160301
 
 //WHERE Line_item_start_date = 'unlimited' OK
 //WHERE Line_item_start_date = '-'
 //LIMIT 10
 IGNORE CASE
-
-
