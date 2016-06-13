@@ -8,7 +8,7 @@ DATE(TIMESTAMP(REGEXP_EXTRACT(Date, '.*/([0-9]{4})$')  + '-' +
     LPAD(REGEXP_EXTRACT(Date, '.*/([0-9]{1,2})/.*'),2,'0'))) AS TransactionDate,
 Ad_unit,
 Line_item_type,
-Creative_size,
+REPLACE(Creative_size,' x ','x') AS Creative_size,
 Advertiser,
 Order AS OrderName,
 Salesperson,
