@@ -1,0 +1,118 @@
+#BQ saved query : DFP_regexReplace_ManagedServicesProcessed
+#Most recent 20160612
+
+SELECT
+//
+DATE(TIMESTAMP(REGEXP_EXTRACT(Date, '.*/([0-9]{4})$')  + '-' + 
+    LPAD(REGEXP_EXTRACT(Date, '^([0-9]{1,2}).*'),2,'0')  + '-' +
+    LPAD(REGEXP_EXTRACT(Date, '.*/([0-9]{1,2})/.*'),2,'0'))) AS TransactionDate,
+Ad_unit,
+Line_item_type,
+Creative_size,
+Advertiser,
+Order AS OrderName,
+Salesperson,
+Line_item,
+Ad_unit_ID,
+Advertiser_ID,
+Order_ID,
+Salesperson_ID,
+Line_item_ID,
+//
+DATE(TIMESTAMP(REGEXP_EXTRACT(REPLACE(REPLACE(Order_start_date,'-',''),'Unlimited',''), '.*/([0-9]{4})$')  + '-' + 
+    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Order_start_date,'-',''),'Unlimited',''), '^([0-9]{1,2}).*'),2,'0')  + '-' +
+    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Order_start_date,'-',''),'Unlimited',''), '.*/([0-9]{1,2})/.*'),2,'0'))) AS Order_start_date,
+//
+DATE(TIMESTAMP(REGEXP_EXTRACT(REPLACE(REPLACE(Order_end_date,'-',''),'Unlimited',''), '.*/([0-9]{4})$')  + '-' + 
+    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Order_end_date,'-',''),'Unlimited',''), '^([0-9]{1,2}).*'),2,'0')  + '-' +
+    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Order_end_date,'-',''),'Unlimited',''), '.*/([0-9]{1,2})/.*'),2,'0'))) AS Order_end_date,
+Order_PO_number,
+Agency,
+Trafficker,
+Secondary_traffickers,
+Delivery_pacing,
+Frequency_cap,
+//
+DATE(TIMESTAMP(REGEXP_EXTRACT(REPLACE(REPLACE(Line_item_start_date,'-',''),'Unlimited',''), '.*/([0-9]{4})$')  + '-' + 
+    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Line_item_start_date,'-',''),'Unlimited',''), '^([0-9]{1,2}).*'),2,'0')  + '-' +
+    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Line_item_start_date,'-',''),'Unlimited',''), '.*/([0-9]{1,2})/.*'),2,'0'))) AS  Line_item_start_date,
+//    
+DATE(TIMESTAMP(REGEXP_EXTRACT(Line_item_end_date, '.*/([0-9]{4})$')  + '-' + 
+    LPAD(REGEXP_EXTRACT(Line_item_end_date, '^([0-9]{1,2}).*'),2,'0')  + '-' +
+    LPAD(REGEXP_EXTRACT(Line_item_end_date, '.*/([0-9]{1,2})/.*'),2,'0'))) AS Line_item_end_date,
+Cost_type,
+REPLACE(Rate_CA,'CA$','') AS Rate_CA,
+REPLACE(REPLACE(Goal_quantity,'-',''),'N/A','') AS Goal_quantity,
+REPLACE(Line_item_lifetime_impressions,'-','') AS Line_item_lifetime_impressions,
+REPLACE(Line_item_lifetime_clicks,'-','') AS Line_item_lifetime_clicks,
+REPLACE(REPLACE(Line_item_priority,'-',''),'N/A','') AS Line_item_priority, 
+REPLACE(Contracted_quantity,'-','') AS Contracted_quantity,
+REPLACE(Discount,'-','') AS Discount,
+REPLACE (Booked_revenue_exclude_CPD_CA,'CA$','') AS Booked_revenue_exclude_CPD_CA,
+Name_Comments,
+Audience_Segment,
+Total_impressions,
+Total_clicks,
+REPLACE (Total_CPM_and_CPC_revenue_CA,'CA$','') AS Total_CPM_and_CPC_revenue_CA,
+REPLACE(REPLACE(Delivery_indicator,'-',''),'N/A','') AS Delivery_indicator,
+Total_Active_View_eligible_impressions,
+Total_Active_View_viewable_impressions,
+REPLACE (Ad_server_CPD_revenue_CA,'CA$','') AS Ad_server_CPD_revenue_CA,
+//
+CASE WHEN Advertiser = 'appnexus - remnant' THEN 'APPNexus'
+WHEN Advertiser = 'google - remnant' THEN 'Google'
+WHEN Advertiser = 'liverail' THEN 'LiveRail'
+WHEN Advertiser = 'rubicon - remnant' THEN 'Rubicon'
+WHEN Advertiser = 'lkqd' THEN 'Lkqd'
+WHEN Advertiser = 'sm dfp' THEN 'SM DFP'
+ELSE 'DFP' END AS PlatformNAME, 
+//
+CASE WHEN Advertiser = 'appnexus - remnant' THEN 2
+WHEN Advertiser = 'google - remnant' THEN 3
+WHEN Advertiser = 'liverail' THEN 4
+WHEN Advertiser = 'rubicon - remnant' THEN 5
+WHEN Advertiser = 'lkqd' THEN 6
+WHEN Advertiser = 'sm dfp' THEN 7
+ELSE 1 END AS PlatformID,
+'Unknown' AS axLineItemTypeNAME,
+99 AS axLineItemTypeID,
+'Unknown' AS axImpTypeNAME,
+99 AS axImpTypeID,
+'Unknown' AS axMediaTypeNAME,
+99 AS axMediaTypeID,
+//
+CASE WHEN Line_item like '%- ron %' THEN  'RON'
+WHEN Line_item like '%- roc %' THEN  'ROC'
+WHEN Line_item like '%- ros %' THEN  'ROS'
+WHEN Line_item like '%sponsorship%' THEN  'ROS'
+WHEN Line_item like '%house%' THEN  'ROS'
+WHEN Line_item like '%targeting%' THEN  'RON'
+WHEN Order like '%appnexus%' OR Order like '%google%' OR Order like '%rubicon%' THEN  'RON'
+WHEN Order like '%house%' THEN  'ROS'
+//
+ELSE 'Unknown' END AS CamTypeNAME,
+CASE WHEN Line_item like '%- ron %' THEN  3
+WHEN Line_item like '%- roc %' THEN  2
+WHEN Line_item like '%- ros %' THEN  1
+WHEN Line_item like '%sponsorship%' THEN  1
+WHEN Line_item like '%house%' THEN  1
+WHEN Line_item like '%targeting%' THEN  3
+WHEN Order like '%appnexus%' OR Order like '%google%' OR Order like '%rubicon%' THEN  3
+WHEN Order like '%house%' THEN  1
+ELSE 99 END AS CamTypeID,
+'Unknown' AS RevTypeNAME,
+99 AS RevTypeID,
+'Unknown' AS ManagedNAME,
+99 AS ManagedID,
+'Unknown' AS AdTypeNAME,
+99 AS AdTypeID,
+0 AS TechFee
+
+FROM ManagedServices.DFP_General_20160601
+
+//WHERE Line_item_start_date = 'unlimited' OK
+//WHERE Line_item_start_date = '-'
+//LIMIT 10
+IGNORE CASE
+
+
