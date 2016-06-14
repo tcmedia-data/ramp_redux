@@ -41,7 +41,12 @@ DATE(TIMESTAMP(DATE(TIMESTAMP(REGEXP_EXTRACT(Line_item_end_date, '.*/([0-9]{4})$
     LPAD(REGEXP_EXTRACT(Line_item_end_date, '^([0-9]{1,2}).*'),2,'0')  + '-' +
     LPAD(REGEXP_EXTRACT(Line_item_end_date, '.*/([0-9]{1,2})/.*'),2,'0'))))) AS Line_item_end_date,
 Cost_type,
-FLOAT(REPLACE(Rate_CA,'CA$','')) AS Rate_CA,
+
+//IF CASTED TO FLOAT GOES NULL PROBLEM
+REPLACE(REPLACE(Rate_CA,'$',''),'CA','') AS Rate_CA,
+//REGEXP_EXTRACT(Rate_CA, '([CA$]{3})') AS Rate_CA,
+//REPLACE(Rate_CA,REGEXP_EXTRACT(Rate_CA, '([CA$]{3})'),'') AS Rate_CA,
+
 INTEGER(REPLACE(REPLACE(Goal_quantity,'-',''),'N/A','')) AS Goal_quantity,
 INTEGER(REPLACE(Line_item_lifetime_impressions,'-','')) AS Line_item_lifetime_impressions,
 INTEGER(REPLACE(Line_item_lifetime_clicks,'-','')) AS Line_item_lifetime_clicks,
