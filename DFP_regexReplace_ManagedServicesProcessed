@@ -59,8 +59,8 @@ INTEGER(Total_Active_View_eligible_impressions) AS Total_Active_View_eligible_im
 INTEGER(Total_Active_View_viewable_impressions) AS Total_Active_View_viewable_impressions,
 FLOAT(REPLACE (Ad_server_CPD_revenue_CA,'CA$','')) AS Ad_server_CPD_revenue_CA,
 //
-CASE WHEN Advertiser = 'appnexus - remnant' THEN 'APPNexus'
-WHEN Advertiser = 'google - remnant' THEN 'AdX'
+CASE WHEN Advertiser = 'appnexus - remnant' THEN 'AppNexus'
+WHEN Advertiser = 'google - remnant' THEN 'ADX'
 WHEN Advertiser = 'liverail' THEN 'LiveRail'
 WHEN Advertiser = 'rubicon - remnant' THEN 'Rubicon'
 WHEN Advertiser = 'lkqd' THEN 'Lkqd'
