@@ -15,9 +15,9 @@ Salesperson,
 Line_item,
 INTEGER(Ad_unit_ID) AS Ad_unit_ID,
 INTEGER(Advertiser_ID) AS Advertiser_ID,
-INTEGER(Order_ID) AS Order_ID,
+INTEGER(REPLACE(Order_ID,'-','0')) AS Order_ID, 
 INTEGER(Salesperson_ID) AS Salesperson_ID,
-INTEGER(Line_item_ID) AS Line_item_ID,
+INTEGER(REPLACE(Line_item_ID,'-','0')) AS Line_item_ID,
 //
 DATE(TIMESTAMP(DATE(TIMESTAMP(REGEXP_EXTRACT(REPLACE(REPLACE(Order_start_date,'-',''),'Unlimited',''), '.*/([0-9]{4})$')  + '-' + 
     LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Order_start_date,'-',''),'Unlimited',''), '^([0-9]{1,2}).*'),2,'0')  + '-' +
