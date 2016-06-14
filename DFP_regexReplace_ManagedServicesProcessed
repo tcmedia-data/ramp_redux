@@ -1,5 +1,5 @@
 #BQ saved query : DFP_regexReplace_ManagedServicesProcessed
-#Most recent 20160612
+#Most recent 20160614
 
 SELECT
 //
@@ -41,28 +41,23 @@ DATE(TIMESTAMP(DATE(TIMESTAMP(REGEXP_EXTRACT(Line_item_end_date, '.*/([0-9]{4})$
     LPAD(REGEXP_EXTRACT(Line_item_end_date, '^([0-9]{1,2}).*'),2,'0')  + '-' +
     LPAD(REGEXP_EXTRACT(Line_item_end_date, '.*/([0-9]{1,2})/.*'),2,'0'))))) AS Line_item_end_date,
 Cost_type,
-
-//IF CASTED TO FLOAT GOES NULL PROBLEM
-REPLACE(REPLACE(Rate_CA,'$',''),'CA','') AS Rate_CA,
-//REGEXP_EXTRACT(Rate_CA, '([CA$]{3})') AS Rate_CA,
-//REPLACE(Rate_CA,REGEXP_EXTRACT(Rate_CA, '([CA$]{3})'),'') AS Rate_CA,
-
-INTEGER(REPLACE(REPLACE(Goal_quantity,'-',''),'N/A','')) AS Goal_quantity,
-INTEGER(REPLACE(Line_item_lifetime_impressions,'-','')) AS Line_item_lifetime_impressions,
-INTEGER(REPLACE(Line_item_lifetime_clicks,'-','')) AS Line_item_lifetime_clicks,
-INTEGER(REPLACE(REPLACE(Line_item_priority,'-',''),'N/A','')) AS Line_item_priority, 
-INTEGER(REPLACE(Contracted_quantity,'-','')) AS Contracted_quantity,
-FLOAT(REPLACE(Discount,'-','')) AS Discount,
-FLOAT(REPLACE (Booked_revenue_exclude_CPD_CA,'CA$','')) AS Booked_revenue_exclude_CPD_CA,
+FLOAT(REPLACE(REPLACE(REPLACE(Rate_CA,'$',''),'CA',''),' ', '')) AS Rate_CA,
+INTEGER(REPLACE(REPLACE(REPLACE(Goal_quantity,'-',''),'N/A',''),' ', '')) AS Goal_quantity,
+INTEGER(REPLACE(REPLACE(Line_item_lifetime_impressions,'-',''),' ', '')) AS  Line_item_lifetime_impressions,
+INTEGER(REPLACE(REPLACE(Line_item_lifetime_clicks,'-',''),' ', '')) AS  Line_item_lifetime_clicks,
+INTEGER(REPLACE(REPLACE(REPLACE(Line_item_priority,'-',''),'N/A',''),' ', '')) AS Line_item_priority, 
+INTEGER(REPLACE(REPLACE(Contracted_quantity,'-',''),' ', '')) AS Contracted_quantity,
+INTEGER(REPLACE(REPLACE(Discount,'-',''),' ', '')) AS Discount,
+FLOAT(REPLACE(REPLACE(REPLACE(Booked_revenue_exclude_CPD_CA,'$',''),'CA',''),' ', '')) AS Booked_revenue_exclude_CPD_CA,
 Name_Comments,
 Audience_Segment,
 INTEGER(Total_impressions) AS Total_impressions,
 INTEGER(Total_clicks) AS Total_clicks,
-FLOAT(REPLACE (Total_CPM_and_CPC_revenue_CA,'CA$','')) AS Total_CPM_and_CPC_revenue_CA,
-FLOAT(REPLACE(REPLACE(Delivery_indicator,'-',''),'N/A','')) AS Delivery_indicator,
+FLOAT(REPLACE(REPLACE (REPLACE (Total_CPM_and_CPC_revenue_CA,'$',''),'CA',''),' ', '')) AS Total_CPM_and_CPC_revenue_CA,
+INTEGER(REPLACE(REPLACE(REPLACE(Delivery_indicator,'-',''),'N/A',''),' ', '')) AS Delivery_indicator,
 INTEGER(Total_Active_View_eligible_impressions) AS Total_Active_View_eligible_impressions,
 INTEGER(Total_Active_View_viewable_impressions) AS Total_Active_View_viewable_impressions,
-FLOAT(REPLACE (Ad_server_CPD_revenue_CA,'CA$','')) AS Ad_server_CPD_revenue_CA,
+FLOAT(REPLACE(REPLACE(REPLACE(Ad_server_CPD_revenue_CA,'$',''),'CA',''),' ', '')) AS Ad_server_CPD_revenue_CA,
 //
 CASE WHEN Advertiser = 'appnexus - remnant' THEN 'AppNexus'
 WHEN Advertiser = 'google - remnant' THEN 'ADX'
@@ -111,11 +106,6 @@ ELSE 99 END AS CamTypeID,
 99 AS ManagedID,
 'Unknown' AS AdTypeNAME,
 99 AS AdTypeID,
-FLOAT(0.00) AS TechFee
-
-FROM ManagedServices.DFP_General_20160301
-
-//WHERE Line_item_start_date = 'unlimited' OK
-//WHERE Line_item_start_date = '-'
-//LIMIT 10
+FLOAT(0.00) AS TechFee,
+FROM ManagedServices_DFPGeneral.DFP_General_20160610
 IGNORE CASE
