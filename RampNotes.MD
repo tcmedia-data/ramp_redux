@@ -29,6 +29,7 @@ Write Transformation Queries [Business Rules]
 	2. bq command line : 
 		2.1 DFP: see DFP_regexReplace_ManagedServicesProcessed
 		2.2 APNX: see APNX_regexReplace_ManagedServicesProcessed
+	3. UNION APNX+DFP  : see APNXDFP_oneMonthUnion
 
 Write RAMP Queries
 ---
