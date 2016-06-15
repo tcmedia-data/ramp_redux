@@ -2,9 +2,10 @@
 #Most recent 20160612
 
 SELECT
-DATE(TIMESTAMP(REGEXP_EXTRACT(processDate, '.*/([0-9]{4})$')  + '-' + 
-    LPAD(REGEXP_EXTRACT(processDate, '^([0-9]{1,2}).*'),2,'0')  + '-' +
-    LPAD(REGEXP_EXTRACT(processDate, '.*/([0-9]{1,2})/.*'),2,'0'))) AS processDate,
+//DATE(TIMESTAMP(REGEXP_EXTRACT(processDate, '.*/([0-9]{4})$')  + '-' + 
+//    LPAD(REGEXP_EXTRACT(processDate, '^([0-9]{1,2}).*'),2,'0')  + '-' +
+//    LPAD(REGEXP_EXTRACT(processDate, '.*/([0-9]{1,2})/.*'),2,'0'))) AS processDate,
+processDate,
 publisher_id,
 publisher_name,
 placement_id,
