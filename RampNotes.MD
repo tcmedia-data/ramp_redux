@@ -27,8 +27,8 @@ Write Transformation Queries [Business Rules]
 ---
 	1. CRON job triggered by above success
 	2. bq command line : 
-		2.1 DFP: see APNX_regexReplace_ManagedServicesProcessed
-		2.2 APNX: see DFP_regexReplace_ManagedServicesProcessed
+		2.1 DFP: see DFP_regexReplace_ManagedServicesProcessed
+		2.2 APNX: see APNX_regexReplace_ManagedServicesProcessed
 
 Write RAMP Queries
 ---
