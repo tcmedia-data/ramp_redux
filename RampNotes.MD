@@ -3,7 +3,7 @@
 
 	Python Wrapper 
 	1. AppNexus
-	2. DFP 
+	2. DFP : see DFP_General_v20160614_ok.R
 	3.  SalesForce 
 	  1. CRON Job
 
