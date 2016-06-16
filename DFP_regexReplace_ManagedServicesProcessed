@@ -42,7 +42,7 @@ DATE(TIMESTAMP(DATE(TIMESTAMP(REGEXP_EXTRACT(Line_item_end_date, '.*/([0-9]{4})$
     LPAD(REGEXP_EXTRACT(Line_item_end_date, '.*/([0-9]{1,2})/.*'),2,'0'))))) AS Line_item_end_date,
 Cost_type,
 FLOAT(REPLACE(REPLACE(REPLACE(REPLACE(Rate_CA,',',''),'$',''),'CA',''),' ', '')) AS Rate_CA,
-INTEGER(REPLACE(Goal_quantity,',','')) AS Goal_quantity,
+INTEGER(REPLACE(REPLACE(Goal_quantity,'N/A',''),',','')) AS Goal_quantity,
 INTEGER(REPLACE(REPLACE(REPLACE(Line_item_lifetime_impressions,',',''),'-',''),' ', '')) AS  Line_item_lifetime_impressions,
 INTEGER(REPLACE(REPLACE(REPLACE(Line_item_lifetime_clicks,',',''),'-',''),' ', '')) AS  Line_item_lifetime_clicks,
 INTEGER(REPLACE(REPLACE(REPLACE(Line_item_priority,'-',''),'N/A',''),' ', '')) AS Line_item_priority, 
@@ -107,7 +107,8 @@ ELSE 99 END AS CamTypeID,
 'Unknown' AS AdTypeNAME,
 99 AS AdTypeID,
 FLOAT(0.00) AS TechFee,
-FROM ManagedServices_DFPGeneral.DFP_General_20160301
+FROM ManagedServices_DFPGeneral.DFP_General_20160304
+//WHERE Goal_quantity IS NULL
 //WHERE Advertiser like '%-Laurendeau%'
 //WHERE Creative_size = '0 x 0'
 //LIMIT 10
