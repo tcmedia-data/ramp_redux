@@ -71,7 +71,7 @@ FROM (
       INTEGER(AdTypeID) AS AdTypeID,
       AdTypeNAME,
       FLOAT(TechFee) AS TechFee
-    FROM (TABLE_DATE_RANGE( ManagedServicesProcessed.DFP_GENERAL_, TIMESTAMP('2016-05-01'), TIMESTAMP('2016-05-31')))),
+    FROM (TABLE_DATE_RANGE( ManagedServicesProcessed.DFP_GENERAL_, TIMESTAMP('2016-04-01'), TIMESTAMP('2016-04-30')))),
     (
     SELECT
       *
@@ -99,13 +99,13 @@ FROM (
       STRING('') AS Delivery_pacing,
       STRING('') AS Frequency_cap,
       STRING('') AS Cost_type,
-      FLOAT(0) AS Rate_CA,
+      FLOAT(0.0) AS Rate_CA,
       INTEGER(0) AS Goal_quantity,
       STRING(size) AS Creative_size,
       STRING('') AS Name_Comments,
       STRING('') AS Audience_Segment,
-      FLOAT(0) AS Delivery_indicator,
-      FLOAT(0) AS Discount,
+      FLOAT(0.0) AS Delivery_indicator,
+      FLOAT(0.0) AS Discount,
       INTEGER(0) AS Line_item_priority,
       INTEGER(0) AS Contracted_quantity,
       INTEGER(0) AS Line_item_lifetime_impressions,
@@ -114,9 +114,9 @@ FROM (
       INTEGER(0) AS Total_Active_View_viewable_impressions,
       INTEGER(imps) AS Total_impressions,
       INTEGER(clicks) AS Total_clicks,
-      FLOAT(0) AS Booked_revenue_exclude_CPD_CA,
-      FLOAT(0) AS Total_CPM_and_CPC_revenue_CA,
-      FLOAT(0) AS Ad_server_CPD_revenue_CA,
+      FLOAT(0.0) AS Booked_revenue_exclude_CPD_CA,
+      FLOAT(0.0) AS Total_CPM_and_CPC_revenue_CA,
+      FLOAT(0.0) AS Ad_server_CPD_revenue_CA,
       INTEGER(total_convs) AS total_convs,
       INTEGER(publisher_id) AS publisher_id,
       STRING(publisher_name) AS publisher_name,
@@ -139,5 +139,5 @@ FROM (
       INTEGER(AdTypeID) AS AdTypeID,
       AdTypeNAME,
       FLOAT(TechFee) AS TechFee
-      FROM (TABLE_DATE_RANGE( ManagedServicesProcessed.APPNEXUS_NETWORK_, TIMESTAMP('2016-05-01'), TIMESTAMP('2016-05-31'))))))
+      FROM (TABLE_DATE_RANGE( ManagedServicesProcessed.APPNEXUS_NETWORK_, TIMESTAMP('2016-04-01'), TIMESTAMP('2016-04-30'))) ) ))
 //LIMIT 10
