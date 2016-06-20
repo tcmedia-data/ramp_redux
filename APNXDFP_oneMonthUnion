@@ -115,7 +115,7 @@ FROM (
       INTEGER(imps) AS Total_impressions,
       INTEGER(clicks) AS Total_clicks,
       FLOAT(0.0) AS Booked_revenue_exclude_CPD_CA,
-      FLOAT(0.0) AS Total_CPM_and_CPC_revenue_CA,
+      FLOAT(revenue) AS Total_CPM_and_CPC_revenue_CA,
       FLOAT(0.0) AS Ad_server_CPD_revenue_CA,
       INTEGER(total_convs) AS total_convs,
       INTEGER(publisher_id) AS publisher_id,
