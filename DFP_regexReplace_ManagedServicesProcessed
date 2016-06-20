@@ -47,7 +47,7 @@ INTEGER(REPLACE(REPLACE(REPLACE(Line_item_lifetime_impressions,',',''),'-',''),'
 INTEGER(REPLACE(REPLACE(REPLACE(Line_item_lifetime_clicks,',',''),'-',''),' ', '')) AS  Line_item_lifetime_clicks,
 INTEGER(REPLACE(REPLACE(REPLACE(Line_item_priority,'-',''),'N/A',''),' ', '')) AS Line_item_priority, 
 INTEGER(REPLACE(REPLACE(REPLACE(Contracted_quantity,',',''),'-',''),' ', '')) AS Contracted_quantity,
-FLOAT(REPLACE(REPLACE(REPLACE(Discount,'-',''),'%',''),' ', '')) AS Discount,
+FLOAT(REPLACE(REPLACE(REPLACE(Discount,'-','0.0'),'%',''),' ', '')) AS Discount,
 FLOAT(REPLACE(REPLACE(REPLACE(REPLACE(Booked_revenue_exclude_CPD_CA,',',''),'$',''),'CA',''),' ', '')) AS Booked_revenue_exclude_CPD_CA,
 Name_Comments,
 Audience_Segment,
