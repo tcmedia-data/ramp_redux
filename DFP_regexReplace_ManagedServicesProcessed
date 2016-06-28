@@ -74,6 +74,7 @@ WHEN Advertiser = 'rubicon - remnant' THEN 5
 WHEN Advertiser = 'lkqd' THEN 6
 WHEN Advertiser = 'sm dfp' THEN 7
 ELSE 1 END AS PlatformID,
+//
 'Unknown' AS axLineItemTypeNAME,
 99 AS axLineItemTypeID,
 'Unknown' AS axImpTypeNAME,
@@ -91,6 +92,7 @@ WHEN Order like '%appnexus%' OR Order like '%google%' OR Order like '%rubicon%' 
 WHEN Order like '%house%' THEN  'ROS'
 //
 ELSE 'Unknown' END AS CamTypeNAME,
+//
 CASE WHEN Line_item like '%- ron %' THEN  3
 WHEN Line_item like '%- roc %' THEN  2
 WHEN Line_item like '%- ros %' THEN  1
@@ -100,13 +102,15 @@ WHEN Line_item like '%targeting%' THEN  3
 WHEN Order like '%appnexus%' OR Order like '%google%' OR Order like '%rubicon%' THEN  3
 WHEN Order like '%house%' THEN  1
 ELSE 99 END AS CamTypeID,
+//
 'Unknown' AS RevTypeNAME,
 99 AS RevTypeID,
 'Unknown' AS ManagedNAME,
 99 AS ManagedID,
 'Unknown' AS AdTypeNAME,
 99 AS AdTypeID,
-FLOAT(0.00) AS TechFee,
+FLOAT(0.00) AS TechFee
+
 FROM ManagedServices_DFPGeneral.DFP_General_20160304
 //WHERE Goal_quantity IS NULL
 //WHERE Advertiser like '%-Laurendeau%'
