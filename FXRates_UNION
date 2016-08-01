@@ -1,0 +1,29 @@
+////DATA FROM: https://www.oanda.com/solutions-for-business/historical-rates/main.html
+////UPLOAD 'FXRates_CAD2USD.csv' & FXRates_USD2CAD.csv' TO GCS FROM: \\SRLVFPS01\Partage_Web\JamesT\_ManagedServicesPerformance\lookup_data\Currency Exchange Rate 
+
+////UPLOAD FROM GCS TO BQ USING BELOW: 
+////bq load --replace --field_delimiter=; --skip_leading_rows=1 extreme-pixel-830:ramp_reference.FXRates_USD2CAD gs://lookup_data/FXRates_USD2CAD.csv FXDate:STRING,USD2CAD:STRING
+////bq load --replace --field_delimiter=; --skip_leading_rows=1 extreme-pixel-830:ramp_reference.FXRates_CAD2USD gs://lookup_data/FXRates_CAD2USD.csv FXDate:STRING,CAD2USD:STRING
+
+////THEN UNION BOTH
+SELECT (A.FXDate) AS FXDate, CAD2USD, USD2CAD FROM 
+(SELECT 
+//FXDate
+IF(RIGHT(A.FXDate,3) CONTAINS '/', 
+// DATE FORMAT AS 1/1/16  
+DATE(TIMESTAMP(LPAD(REGEXP_EXTRACT(A.FXDate, '.*/([0-9]{1,2})$'),4,'20')  + '-' + 
+    LPAD(REGEXP_EXTRACT(A.FXDate, '^([0-9]{1,2}).*'),2,'0')  + '-' +
+    LPAD(REGEXP_EXTRACT(A.FXDate, '.*/([0-9]{1,2})/.*'),2,'0'))),
+// DATE FORMAT AS 1/1/2016  
+DATE(TIMESTAMP(REGEXP_EXTRACT(A.FXDate, '.*/([0-9]{4})$')  + '-' + 
+    LPAD(REGEXP_EXTRACT(A.FXDate, '^([0-9]{1,2}).*'),2,'0')  + '-' +
+    LPAD(REGEXP_EXTRACT(A.FXDate, '.*/([0-9]{1,2})/.*'),2,'0')))) AS A.FXDate,
+FLOAT(CAD2USD) AS CAD2USD, 
+FLOAT(USD2CAD) AS USD2CAD 
+FROM
+(SELECT FXDate AS FXDate,CAD2USD 
+FROM ramp_reference.FXRates_CAD2USD) AS A
+JOIN ramp_reference.FXRates_USD2CAD AS B 
+ON A.FXDate = B.FXDate) AS C
+ORDER BY A.FXDate ASC
+//SAVE OUTPUT TO/OVERWRITE TABLE: ramp_reference.FXRates
