@@ -47,8 +47,8 @@ def buildReport(startDate, endDate, outfile, bruFile):
 
     output_json = report.get()
 
-    output = csv.DictWriter(open(outfile , 'w'), fieldnames=columns, delimiter=';')
-    bru_output = csv.DictWriter(open(bruFile, 'w'), fieldnames=columns, delimiter=';')
+    output = csv.DictWriter(open(outfile , 'w',newline=''), fieldnames=columns, delimiter=';')
+    bru_output = csv.DictWriter(open(bruFile, 'w',newline=''), fieldnames=columns, delimiter=';')
     output.writeheader()
     for row in output_json:
         output.writerow(row)
