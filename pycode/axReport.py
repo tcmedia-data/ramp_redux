@@ -36,22 +36,56 @@ def buildReport(startDate, endDate, outfile, bruFile):
                "revenue_buying_currency"]
 
     report_type = "network_analytics"
-
-    filters = [{"imps":{"operator":"!=","value": 6}}]
+    SEMI = ';'
 
     report = AppnexusReport(start_date=startDate,
                             end_date=endDate,
-                            #filters=filters,
                             report_type=report_type,
                             columns=columns)
-
     output_json = report.get()
-
-    output = csv.DictWriter(open(outfile , 'w',newline=''), fieldnames=columns, delimiter=';')
-    bru_output = csv.DictWriter(open(bruFile, 'w',newline=''), fieldnames=columns, delimiter=';')
-    output.writeheader()
+    bru_output = csv.DictWriter(open(bruFile, 'w', newline=''), fieldnames=columns,delimiter=';',quoting = csv.QUOTE_MINIMAL)
+    output = open(outfile , 'w', newline='')
+    output.write (';'.join(columns) + '\n')
     for row in output_json:
-        output.writerow(row)
+        line = row['day'] + SEMI + row['publisher_name'] \
+               + SEMI + row['publisher_id'] \
+               + SEMI + row['placement_name'].replace(',','').replace(';','')\
+               + SEMI + row['placement_id']\
+               + SEMI + row['site_name'].replace(',','').replace(';','')\
+               + SEMI + row['site_id']\
+               + SEMI + row['buyer_member_name'].replace(',','').replace(';','')\
+               + SEMI + row['buyer_member_id']\
+               + SEMI + row['seller_member_name'].replace(',','').replace(';','')\
+               + SEMI + row['seller_member_id']\
+               + SEMI + row['advertiser_name'].replace(',','').replace(';','')\
+               + SEMI + row['advertiser_id']\
+               + SEMI + row['line_item_name'].replace(',','').replace(';','')\
+               + SEMI + row['line_item_id']\
+               + SEMI + row['campaign_id']\
+               + SEMI + row['campaign_name'].replace(',','').replace(';','')\
+               + SEMI + row['bid_type'] \
+               + SEMI + row['advertiser_currency'] \
+               + SEMI + row['publisher_currency']\
+               + SEMI + row['imp_type']\
+               + SEMI + row['campaign_priority']\
+               + SEMI + row['media_type']\
+               + SEMI + row['line_item_type']\
+               + SEMI + row['payment_type']\
+               + SEMI + row['revenue_type']\
+               + SEMI + row['imps']\
+               + SEMI + row['clicks']\
+               + SEMI + row['total_convs']\
+               + SEMI + row['revenue']\
+               + SEMI + row['revenue_buying_currency']
+
+        line= line.replace(';Inc',' Inc')\
+            .replace(';LLC',' LLC')\
+            .replace('TheRichest.com;TheSportster.com;Thetalko.com;Screenrant.com','TheRichest.com-TheSportster.com-Thetalko.com-Screenrant.com')\
+            .replace('sportingz.com;semesterz.com','sportingz.com-semesterz.com' )\
+            .replace('Viewmixed.com;Zonable.com;Boreburn.com;uberhavoc.com;uberceleb.com;udderlypettable.com','Viewmixed.com-Zonable.com-Boreburn.com-uberhavoc.com-uberceleb.com-udderlypettable.com')\
+            .replace('"','')
+        output.write(line)
+        output.write('\n')
         if 'BRU' in row['campaign_name']:
             bru_output.writerow(row)
 
@@ -78,6 +112,12 @@ def main(argv):
             startdate = arg
         elif opt in ("-e", "--edate"):
             enddate = arg
+
+    # outfile = '/tmp/outfile.csv'
+    # brufile = '/tmp/brufile.csv'
+    # startdate='2016-07-31'
+    # enddate = '2016-08-01'
+
 
     buildReport(startdate, enddate,outfile,brufile)
 
