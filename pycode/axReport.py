@@ -47,7 +47,7 @@ def buildReport(startDate, endDate, outfile, bruFile):
     output = open(outfile , 'w', newline='')
     output.write (';'.join(columns) + '\n')
     for row in output_json:
-        line = row['day'] + SEMI + row['publisher_name'] \
+        line = row['day'] + SEMI + row['publisher_name'].replace(',','').replace(';','') \
                + SEMI + row['publisher_id'] \
                + SEMI + row['placement_name'].replace(',','').replace(';','')\
                + SEMI + row['placement_id']\
@@ -79,11 +79,11 @@ def buildReport(startDate, endDate, outfile, bruFile):
                + SEMI + row['revenue_buying_currency']
 
         line= line.replace(';Inc',' Inc')\
-            .replace(';LLC',' LLC')\
-            .replace('TheRichest.com;TheSportster.com;Thetalko.com;Screenrant.com','TheRichest.com-TheSportster.com-Thetalko.com-Screenrant.com')\
-            .replace('sportingz.com;semesterz.com','sportingz.com-semesterz.com' )\
-            .replace('Viewmixed.com;Zonable.com;Boreburn.com;uberhavoc.com;uberceleb.com;udderlypettable.com','Viewmixed.com-Zonable.com-Boreburn.com-uberhavoc.com-uberceleb.com-udderlypettable.com')\
-            .replace('"','')
+                .replace(';LLC',' LLC')\
+                .replace('TheRichest.com;TheSportster.com;Thetalko.com;Screenrant.com','TheRichest.com-TheSportster.com-Thetalko.com-Screenrant.com')\
+                .replace('sportingz.com;semesterz.com','sportingz.com-semesterz.com' )\
+                .replace('Viewmixed.com;Zonable.com;Boreburn.com;uberhavoc.com;uberceleb.com;udderlypettable.com','Viewmixed.com-Zonable.com-Boreburn.com-uberhavoc.com-uberceleb.com-udderlypettable.com')\
+                .replace('"','')
         output.write(line)
         output.write('\n')
         if 'BRU' in row['campaign_name']:
