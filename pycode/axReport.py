@@ -4,20 +4,21 @@ import csv
 import sys, getopt
 def buildReport(startDate, endDate, outfile, bruFile):
     columns = ["day",
-               "publisher_name",
                "publisher_id",
-               "placement_name",
+               "publisher_name",
                "placement_id",
-               "site_name",
+               "placement_name",
                "site_id",
-               "buyer_member_name",
+               "site_name",
+               "size",
                "buyer_member_id",
-               "seller_member_name",
+               "buyer_member_name",
                "seller_member_id",
-               "advertiser_name",
+               "seller_member_name",
                "advertiser_id",
-               "line_item_name",
+               "advertiser_name",
                "line_item_id",
+               "line_item_name",
                "campaign_id",
                "campaign_name",
                "bid_type",
@@ -29,11 +30,13 @@ def buildReport(startDate, endDate, outfile, bruFile):
                "line_item_type",
                "payment_type",
                "revenue_type",
+               "pub_rule_id", 
+               "pub_rule_name",
                "imps",
                "clicks",
                "total_convs",
-               "revenue",
-               "revenue_buying_currency"]
+               "revenue"]
+               ##"revenue_buying_currency"]
 
     report_type = "network_analytics"
     SEMI = ';'
@@ -47,20 +50,21 @@ def buildReport(startDate, endDate, outfile, bruFile):
     output = open(outfile , 'w', newline='')
     output.write (';'.join(columns) + '\n')
     for row in output_json:
-        line = row['day'] + SEMI + row['publisher_name'].replace(',','').replace(';','') \
-               + SEMI + row['publisher_id'] \
-               + SEMI + row['placement_name'].replace(',','').replace(';','')\
+        line = row['day'] + SEMI + row['publisher_id'] \
+               + SEMI + row['publisher_name'].replace(',','').replace(';','') \
                + SEMI + row['placement_id']\
-               + SEMI + row['site_name'].replace(',','').replace(';','')\
+               + SEMI + row['placement_name'].replace(',','').replace(';','')\
                + SEMI + row['site_id']\
-               + SEMI + row['buyer_member_name'].replace(',','').replace(';','')\
+               + SEMI + row['site_name'].replace(',','').replace(';','')\
+               + SEMI + row['size'].replace(',','').replace(';','')\
                + SEMI + row['buyer_member_id']\
-               + SEMI + row['seller_member_name'].replace(',','').replace(';','')\
+               + SEMI + row['buyer_member_name'].replace(',','').replace(';','')\
                + SEMI + row['seller_member_id']\
-               + SEMI + row['advertiser_name'].replace(',','').replace(';','')\
+               + SEMI + row['seller_member_name'].replace(',','').replace(';','')\
                + SEMI + row['advertiser_id']\
-               + SEMI + row['line_item_name'].replace(',','').replace(';','')\
+               + SEMI + row['advertiser_name'].replace(',','').replace(';','')\
                + SEMI + row['line_item_id']\
+               + SEMI + row['line_item_name'].replace(',','').replace(';','')\
                + SEMI + row['campaign_id']\
                + SEMI + row['campaign_name'].replace(',','').replace(';','')\
                + SEMI + row['bid_type'] \
@@ -72,11 +76,13 @@ def buildReport(startDate, endDate, outfile, bruFile):
                + SEMI + row['line_item_type']\
                + SEMI + row['payment_type']\
                + SEMI + row['revenue_type']\
+               + SEMI + row['pub_rule_id']\
+               + SEMI + row['pub_rule_name']\
                + SEMI + row['imps']\
                + SEMI + row['clicks']\
                + SEMI + row['total_convs']\
-               + SEMI + row['revenue']\
-               + SEMI + row['revenue_buying_currency']
+               + SEMI + row['revenue']
+               ##+ SEMI + row['revenue_buying_currency']
 
         line= line.replace(';Inc',' Inc')\
                 .replace(';LLC',' LLC')\
