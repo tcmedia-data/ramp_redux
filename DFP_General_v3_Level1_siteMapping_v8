@@ -144,6 +144,7 @@ AdSense_revenue_CA,
 Ad_Exchange_revenue_CA
 //END OF RULES INSTALLED 20160802 OR 20160804
 //-------------------------------------
+FROM(
 
 SELECT
 //TransactionDate : validate for Total line visible as 'total' 
