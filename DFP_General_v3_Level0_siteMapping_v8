@@ -297,7 +297,7 @@ INTEGER(Ad_Exchange_Active_View_viewable_impressions) AS Ad_Exchange_Active_View
 //
 CASE WHEN LOWER(Advertiser) LIKE LOWER('%google%remnant%') THEN 'ADX'
 WHEN LOWER(Advertiser) LIKE LOWER('%sm dfp%') THEN 'SM DFP'
-WHEN LOWER(Advertiser) LIKE LOWER('%appNexus%remnant%') THEN 'AppNexus'
+WHEN LOWER(Advertiser) LIKE LOWER('%appNexus%remnant%') THEN 'DFP' ////Changed 20160809 by Claude from'AppNexus'
 WHEN LOWER(Advertiser) LIKE LOWER('%liverail%') THEN 'LiveRail'
 WHEN LOWER(Advertiser) LIKE LOWER('%rubicon%remnant%') THEN 'Rubicon'
 WHEN LOWER(Advertiser) LIKE LOWER('%lkqd%') THEN 'Lkqd'
@@ -305,7 +305,7 @@ ELSE 'DFP' END AS PlatformNAME,
 //
 CASE WHEN LOWER(Advertiser) LIKE LOWER('%google%remnant%') THEN 3
 WHEN LOWER(Advertiser) LIKE LOWER('%sm dfp%') THEN 7
-WHEN LOWER(Advertiser) LIKE LOWER('%appNexus%remnant%') THEN 2
+WHEN LOWER(Advertiser) LIKE LOWER('%appNexus%remnant%') THEN 1 ////Changed 20160809 by Claude from 2
 WHEN LOWER(Advertiser) LIKE LOWER('%liverail%') THEN 4
 WHEN LOWER(Advertiser) LIKE LOWER('%rubicon%remnant%') THEN 5
 WHEN LOWER(Advertiser) LIKE LOWER('%lkqd') THEN 6
