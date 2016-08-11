@@ -1,0 +1,392 @@
+//APNXDFP_UNION_wFXRates_Monthly_v8
+//Step 1: UNION of ManagedServices_DFPGeneral.DFP_GENERAL_LevelALL + ManagedServices.APPNEXUS_NETWORK_JOIN
+//Step 2: JOIN of ramp_reference.FXRates
+//20160810
+
+////UNION DFP
+SELECT
+TransactionDate,
+Ad_unit_1,
+Ad_unit_2,
+Ad_unit_3,
+Line_item_type,
+Creative_size,
+Advertiser,
+OrderName,
+Salesperson,
+Line_item,
+Product_template, //New Col V3
+Ad_unit_ID_1,
+Ad_unit_ID_2,
+Ad_unit_ID_3,
+Advertiser_ID,
+Order_ID, 
+Salesperson_ID,
+Line_item_ID,
+Product_template_ID, //New Col V3
+Order_start_date,
+Order_end_date,
+Order_PO_number,
+Agency,
+Trafficker,
+Secondary_traffickers,
+Delivery_pacing,
+Frequency_cap,
+Line_item_start_date,
+Line_item_end_date,
+Cost_type,
+Rate_CA,
+Goal_quantity,
+Line_item_lifetime_impressions,
+Line_item_lifetime_clicks,
+Line_item_priority, 
+Contracted_quantity,
+Discount,
+Booked_revenue_exclude_CPD_CA,
+Name_Comments,
+Audience_Segment,
+LineItem_Type,
+LineItem_Type_product,
+Delivery_indicator,
+Total_Active_View_eligible_impressions,
+Total_Active_View_viewable_impressions,
+PlatformNAME, 
+PlatformID,
+axLineItemTypeNAME,
+axLineItemTypeID,
+axImpTypeNAME,
+axImpTypeID,
+axMediaTypeNAME,
+axMediaTypeID,
+CamTypeNAME,
+CamTypeID,
+RevTypeNAME,
+RevTypeID,
+ManagedNAME,
+ManagedID,
+AdTypeNAME,
+AdTypeID,
+TechFee,
+DataSource,
+LevelOne,
+ID1,
+ID2,
+APNXAccountName,
+APNXPublisherName,
+APNXPublisherID,
+Site,
+Site_ID,
+Site_ID_calc,
+Adv,
+DisplayRevShare,
+TCAdvertiserGroup,
+TCBusinessUnit,
+TCPublisher,
+TCSite,
+PARTNERGroup,
+TCCampSrc,
+ImpressionSource,
+Passback,
+ContainerSource,
+
+//METRICS
+Ad_server_impressions,
+Ad_server_clicks,
+AdSense_impressions,
+AdSense_clicks,
+Ad_Exchange_impressions,
+Ad_Exchange_clicks,
+Ad_server_CPM_and_CPC_revenue_CA,
+Ad_server_CPD_revenue_CA,
+AdSense_revenue_CA,
+Ad_Exchange_revenue_CA,
+Total_CPM_and_CPC_revenue_CA,
+Total_impressions,
+Total_clicks,
+IMPS_Final,
+CLICKS_Final,
+REVS_CPMCPC_Final,
+REVS_CPD_Final,
+//End of Added 20160801
+//-----------------------------
+//FXRates Start
+CAD2USD,
+USD2CAD,
+
+CASE WHEN PlatformID IN (1,3) THEN 'CAD'
+ELSE 'USD' 
+END AS CURRENCY,
+
+////REVS_Final IN CAD
+////REVS_CPMCPC_Final replace Total_CPM_and_CPC_revenue_CA
+CASE WHEN PlatformID IN (1,3) THEN  REVS_CPMCPC_Final
+ELSE (REVS_CPMCPC_Final * USD2CAD)
+END AS REVS_CPMCPC_CAD_Final,
+////REVS_CPD_Final replace Ad_server_CPD_revenue_CA
+CASE WHEN PlatformID IN (1,3) THEN REVS_CPD_Final
+ELSE (REVS_CPD_Final * USD2CAD)
+END AS REVS_CPD_CAD_Final,
+
+////CAD REVS_Final IN USD
+////REVS_CPMCPC_Final replace Total_CPM_and_CPC_revenue_CA
+CASE WHEN PlatformID IN (1,3) THEN (REVS_CPMCPC_Final * CAD2USD)
+ELSE REVS_CPMCPC_Final
+END AS REVS_CPMCPC_CAD2USD_Final,
+////REVS_CPD_Final replace Ad_server_CPD_revenue_CA
+CASE WHEN PlatformID IN (1,3) THEN  (REVS_CPD_Final * CAD2USD)
+ELSE REVS_CPD_Final
+END AS REVS_CPD_CAD2USD_Final,
+
+////REVS_Final IN USD
+////REVS_CPMCPC_Final replace Total_CPM_and_CPC_revenue_CA
+CASE WHEN PlatformID=2 THEN REVS_CPMCPC_Final
+ELSE (REVS_CPMCPC_Final * CAD2USD)
+END AS REVS_CPMCPC_USD_Final,
+////REVS_CPD_Final replace Ad_server_CPD_revenue_CA
+CASE WHEN PlatformID=2 THEN REVS_CPD_Final
+//ELSE (Ad_server_CPD_revenue_CA * CAD2USD)
+ELSE (REVS_CPD_Final * CAD2USD)   
+END AS REVS_CPD_USD_Final,
+
+////USD REVS_Final IN CAD
+////REVS_CPMCPC_Final replace Total_CPM_and_CPC_revenue_CA
+CASE WHEN PlatformID=2 THEN (REVS_CPMCPC_Final * USD2CAD)
+ELSE REVS_CPMCPC_Final
+END AS REVS_CPMCPC_USD2CAD_Final,
+////REVS_CPD_Final replace Ad_server_CPD_revenue_CA
+CASE WHEN PlatformID=2 THEN (REVS_CPD_Final * USD2CAD)
+//ELSE Ad_server_CPD_revenue_CA
+ELSE REVS_CPD_Final
+END AS REVS_CPD_USD2CAD_Final
+//FXRates End
+////--------------------------------
+
+FROM (
+   
+////--------------------------------
+////UNION APNX
+SELECT
+    *
+  FROM (
+    SELECT
+DATE(TransactionDate) AS TransactionDate,
+Ad_unit_1,
+Ad_unit_2,
+Ad_unit_3,
+Line_item_type,
+Creative_size,
+Advertiser,
+OrderName,
+Salesperson,
+Line_item,
+Product_template,
+STRING(Ad_unit_ID_1) AS Ad_unit_ID_1,
+STRING(Ad_unit_ID_2) AS Ad_unit_ID_2,
+STRING(Ad_unit_ID_3) AS Ad_unit_ID_3,
+INTEGER(Advertiser_ID) AS Advertiser_ID,
+INTEGER(Order_ID) AS Order_ID, 
+INTEGER(Salesperson_ID) AS Salesperson_ID,
+INTEGER(Line_item_ID) AS Line_item_ID,
+INTEGER(Product_template_ID) AS Product_template_ID,
+DATE(Order_start_date) AS Order_start_date,
+DATE(Order_end_date) AS Order_end_date,
+Order_PO_number,
+Agency,
+Trafficker,
+Secondary_traffickers,
+Delivery_pacing,
+Frequency_cap,
+DATE(Line_item_start_date) AS Line_item_start_date,
+DATE(Line_item_end_date) AS Line_item_end_date,
+Cost_type,
+FLOAT(Rate_CA) AS Rate_CA,
+INTEGER(Goal_quantity) AS Goal_quantity,
+INTEGER(Line_item_lifetime_impressions) AS  Line_item_lifetime_impressions,
+INTEGER(Line_item_lifetime_clicks) AS  Line_item_lifetime_clicks,
+INTEGER(Line_item_priority) AS Line_item_priority, 
+INTEGER(Contracted_quantity) AS Contracted_quantity,
+FLOAT(Discount) AS Discount,
+FLOAT(Booked_revenue_exclude_CPD_CA) AS Booked_revenue_exclude_CPD_CA,
+Name_Comments,
+Audience_Segment,
+LineItem_Type, 
+LineItem_Type_product, 
+FLOAT(Delivery_indicator) AS Delivery_indicator,
+INTEGER(Total_Active_View_eligible_impressions) AS Total_Active_View_eligible_impressions,
+INTEGER(Total_Active_View_viewable_impressions) AS Total_Active_View_viewable_impressions,
+PlatformNAME, 
+PlatformID,
+axLineItemTypeNAME,
+axLineItemTypeID,
+axImpTypeNAME,
+axImpTypeID,
+axMediaTypeNAME,
+axMediaTypeID,
+CamTypeNAME,
+CamTypeID,
+RevTypeNAME,
+RevTypeID,
+ManagedNAME,
+ManagedID,
+AdTypeNAME,
+AdTypeID,
+TechFee,
+DataSource,
+LevelOne,
+ID1,
+ID2,
+APNXAccountName,
+APNXPublisherName,
+APNXPublisherID,
+Site,
+Site_ID,
+Site_ID_calc,
+Adv,
+DisplayRevShare,
+TCAdvertiserGroup,
+TCBusinessUnit,
+TCPublisher,
+TCSite,
+PARTNERGroup,
+TCCampSrc,
+ImpressionSource,
+Passback,
+ContainerSource,
+
+//Metrics
+INTEGER(Ad_server_impressions) AS Ad_server_impressions,
+INTEGER(Ad_server_clicks) AS Ad_server_clicks,
+INTEGER(AdSense_impressions) AS AdSense_impressions,
+INTEGER(AdSense_clicks) AS AdSense_clicks,
+INTEGER(Ad_Exchange_impressions) AS Ad_Exchange_impressions,
+INTEGER(Ad_Exchange_clicks) AS Ad_Exchange_clicks,
+FLOAT(Ad_server_CPM_and_CPC_revenue_CA) AS Ad_server_CPM_and_CPC_revenue_CA,
+FLOAT(Ad_server_CPD_revenue_CA) AS Ad_server_CPD_revenue_CA,
+FLOAT(AdSense_revenue_CA) AS AdSense_revenue_CA,
+FLOAT(Ad_Exchange_revenue_CA) AS Ad_Exchange_revenue_CA,
+FLOAT(Total_CPM_and_CPC_revenue_CA) AS Total_CPM_and_CPC_revenue_CA,
+INTEGER(Total_impressions) AS Total_impressions,
+INTEGER(Total_clicks) AS Total_clicks,
+IMPS_Final,
+CLICKS_Final,
+REVS_CPMCPC_Final,
+REVS_CPD_Final
+
+    FROM ManagedServices_DFP.DFP_GENERAL_LevelALL_20160601),
+
+    (
+    SELECT
+      *
+    FROM (
+      SELECT
+DATE(TransactionDate) AS TransactionDate,
+Ad_unit_1,
+Ad_unit_2,
+Ad_unit_3,
+Line_item_type,
+Creative_size,
+Advertiser,
+OrderName,
+Salesperson,
+Line_item,
+Product_template,
+STRING(Ad_unit_ID_1) AS Ad_unit_ID_1,
+STRING(Ad_unit_ID_2) AS Ad_unit_ID_2,
+STRING(Ad_unit_ID_3) AS Ad_unit_ID_3,
+INTEGER(Advertiser_ID) AS Advertiser_ID,
+INTEGER(Order_ID) AS Order_ID, 
+INTEGER(Salesperson_ID) AS Salesperson_ID,
+INTEGER(Line_item_ID) AS Line_item_ID,
+INTEGER(Product_template_ID) AS Product_template_ID,
+DATE(Order_start_date) AS Order_start_date,
+DATE(Order_end_date) AS Order_end_date,
+Order_PO_number,
+Agency,
+Trafficker,
+Secondary_traffickers,
+Delivery_pacing,
+Frequency_cap,
+DATE(Line_item_start_date) AS Line_item_start_date,
+DATE(Line_item_end_date) AS Line_item_end_date,
+Cost_type,
+FLOAT(Rate_CA) AS Rate_CA,
+INTEGER(Goal_quantity) AS Goal_quantity,
+INTEGER(Line_item_lifetime_impressions) AS  Line_item_lifetime_impressions,
+INTEGER(Line_item_lifetime_clicks) AS  Line_item_lifetime_clicks,
+INTEGER(Line_item_priority) AS Line_item_priority, 
+INTEGER(Contracted_quantity) AS Contracted_quantity,
+FLOAT(Discount) AS Discount,
+FLOAT(Booked_revenue_exclude_CPD_CA) AS Booked_revenue_exclude_CPD_CA,
+Name_Comments,
+Audience_Segment,
+LineItem_Type, 
+LineItem_Type_product, 
+FLOAT(Delivery_indicator) AS Delivery_indicator,
+INTEGER(Total_Active_View_eligible_impressions) AS Total_Active_View_eligible_impressions,
+INTEGER(Total_Active_View_viewable_impressions) AS Total_Active_View_viewable_impressions,
+PlatformNAME, 
+PlatformID,
+axLineItemTypeNAME,
+axLineItemTypeID,
+axImpTypeNAME,
+axImpTypeID,
+axMediaTypeNAME,
+axMediaTypeID,
+CamTypeNAME,
+CamTypeID,
+RevTypeNAME,
+RevTypeID,
+ManagedNAME,
+ManagedID,
+AdTypeNAME,
+AdTypeID,
+TechFee,
+DataSource,
+LevelOne,
+ID1,
+ID2,
+APNXAccountName,
+APNXPublisherName,
+APNXPublisherID,
+Site,
+Site_ID,
+Site_ID_calc,
+Adv,
+DisplayRevShare,
+TCAdvertiserGroup,
+TCBusinessUnit,
+TCPublisher,
+TCSite,
+PARTNERGroup,
+TCCampSrc,
+ImpressionSource,
+Passback,
+ContainerSource,
+
+//Metrics
+INTEGER(Ad_server_impressions) AS Ad_server_impressions,
+INTEGER(Ad_server_clicks) AS Ad_server_clicks,
+INTEGER(AdSense_impressions) AS AdSense_impressions,
+INTEGER(AdSense_clicks) AS AdSense_clicks,
+INTEGER(Ad_Exchange_impressions) AS Ad_Exchange_impressions,
+INTEGER(Ad_Exchange_clicks) AS Ad_Exchange_clicks,
+FLOAT(Ad_server_CPM_and_CPC_revenue_CA) AS Ad_server_CPM_and_CPC_revenue_CA,
+FLOAT(Ad_server_CPD_revenue_CA) AS Ad_server_CPD_revenue_CA,
+FLOAT(AdSense_revenue_CA) AS AdSense_revenue_CA,
+FLOAT(Ad_Exchange_revenue_CA) AS Ad_Exchange_revenue_CA,
+FLOAT(Total_CPM_and_CPC_revenue_CA) AS Total_CPM_and_CPC_revenue_CA,
+INTEGER(Total_impressions) AS Total_impressions,
+INTEGER(Total_clicks) AS Total_clicks,
+IMPS_Final,
+CLICKS_Final,
+REVS_CPMCPC_Final,
+REVS_CPD_Final
+
+      FROM ManagedServices_APNX.APPNEXUS_NETWORK_Monthly_20160601))
+
+//--------------------------------
+) AS A
+JOIN ramp_reference.FXRates AS B
+ON A.TransactionDate = B.FXDate
+//LIMIT 10
+//SAVE OUTPUT TO: ManagedServicesProcessed.APNXDFP_20160x01

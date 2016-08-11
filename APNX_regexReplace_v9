@@ -1,0 +1,421 @@
+//APNX_regexReplace_v9
+//20160810
+//REVS_Final & IMPS_Final 
+//Using siteMapping_v8
+
+SELECT 
+TransactionDate,
+Ad_unit_1,
+Ad_unit_2,
+Ad_unit_3,
+Line_item_type,
+Creative_size,
+Advertiser,
+OrderName,
+Salesperson,
+Line_item,
+Product_template, //New Col V3
+STRING(Ad_unit_ID_1) AS Ad_unit_ID_1,
+STRING(Ad_unit_ID_2) AS Ad_unit_ID_2,
+STRING(Ad_unit_ID_3) AS Ad_unit_ID_3,
+Advertiser_ID,
+Order_ID, 
+Salesperson_ID,
+Line_item_ID,
+Product_template_ID, //New Col V3
+Order_start_date,
+Order_end_date,
+Order_PO_number,
+Agency,
+Trafficker,
+Secondary_traffickers,
+Delivery_pacing,
+Frequency_cap,
+Line_item_start_date,
+Line_item_end_date,
+Cost_type,
+Rate_CA,
+Goal_quantity,
+Line_item_lifetime_impressions,
+Line_item_lifetime_clicks,
+Line_item_priority, 
+Contracted_quantity,
+Discount,
+Booked_revenue_exclude_CPD_CA,
+Name_Comments,
+Audience_Segment,
+LineItem_Type, //New Col V3
+LineItem_Type_product, //New Col V3
+Delivery_indicator,
+//Total_impressions,
+//Total_clicks,
+//Total_CPM_and_CPC_revenue_CA,
+Total_Active_View_eligible_impressions,
+Total_Active_View_viewable_impressions,
+//Ad_server_CPD_revenue_CA,
+
+PlatformNAME, 
+PlatformID,
+
+axLineItemTypeNAME,
+axLineItemTypeID,
+axImpTypeNAME,
+axImpTypeID,
+axMediaTypeNAME,
+axMediaTypeID,
+CamTypeNAME,
+CamTypeID,
+RevTypeNAME,
+RevTypeID,
+ManagedNAME,
+ManagedID,
+AdTypeNAME,
+AdTypeID,
+TechFee,
+DataSource,
+//SITEMAPPING HELPER COLUMNS - see JOIN table below
+LevelOne,
+ID1,
+ID2,
+
+//Added 20160724
+//OLD AccountName AS Publisher,
+AccountName AS APNXAccountName,
+APNXPublisherName,
+APNXPublisherID,
+//END OF 20160724
+
+SitePropertyName AS Site,
+STRING(AdUnitID) AS Site_ID,
+
+//Calculated AdUnitID to compare against above col
+CASE WHEN LevelOne=1 THEN ID1 
+ELSE ID1
+END AS Site_ID_calc,
+
+//if(LOWER(Advertiser) CONTAINS 'remnant', 'Remnant', if(LOWER(Advertiser) CONTAINS 'bidding','Bidding','Other')) AS Adv,
+if(LOWER(Advertiser) CONTAINS 'remnant', 'Remnant', if(LOWER(Line_item_type) CONTAINS 'convertmedia','Remnant',if(LOWER(Advertiser) CONTAINS 'bidding','Bidding','Other'))) AS Adv,
+
+CASE WHEN DisplayRevShare IS NULL THEN '0'
+ELSE DisplayRevShare END AS DisplayRevShare,
+//TCMAPPING HELPER COLUMNS - see JOIN table below
+
+TCAdvertiserGroup,
+TCBusinessUnit,
+TCPublisher,
+TCSite,
+PARTNERGroup, 
+TCCampSrc,
+ImpressionSource,
+Passback,
+ContainerSource,
+
+//-------------------------------------
+//Below Rules installed 20160802
+
+//Ad SERVER
+INTEGER(0) AS Ad_server_impressions,
+INTEGER(0) AS Ad_server_clicks,
+
+//ADSENSE
+INTEGER(0) AS AdSense_impressions,
+INTEGER(0) AS AdSense_clicks,
+
+//ADX 
+INTEGER(0) AS Ad_Exchange_impressions,
+INTEGER(0) AS Ad_Exchange_clicks,
+
+//AD SERVER REVS
+FLOAT(0) AS Ad_server_CPM_and_CPC_revenue_CA,
+FLOAT(0) AS Ad_server_CPD_revenue_CA,
+
+//ADSENSE REVS
+FLOAT(0) AS AdSense_revenue_CA,
+
+//ADX REVS
+FLOAT(0) AS Ad_Exchange_revenue_CA,
+
+//Total Metrics
+Total_CPM_and_CPC_revenue_CA,
+Total_impressions,
+Total_clicks,
+//total_convs,
+
+//_Final METRICS
+//IMPS_Final 
+CASE WHEN Passback = 1 THEN 0
+WHEN LOWER(placement_name) LIKE LOWER('%passback%') THEN 0
+WHEN LOWER(ImpressionSource) <> LOWER('AppNexus') THEN 0
+ELSE Total_impressions END AS IMPS_Final,
+
+CLICKS_Final,
+REVS_CPMCPC_Final,
+REVS_CPD_Final
+//END OF FINAL METRICS INSTALLED 20160804
+//-------------------------------------
+
+FROM(
+
+SELECT
+IF(RIGHT(processDate,3) CONTAINS '/', 
+// IF DATE FORMAT IS AS 1/1/16  
+DATE(TIMESTAMP(LPAD(REGEXP_EXTRACT(processDate, '.*/([0-9]{1,2})$'),4,'20')  + '-' + 
+     LPAD(REGEXP_EXTRACT(processDate, '^([0-9]{1,2}).*'),2,'0')  + '-' +
+     LPAD(REGEXP_EXTRACT(processDate, '.*/([0-9]{1,2})/.*'),2,'0'))),
+// IF DATE FORMAT IS AS 1/1/2016 
+IF(RIGHT(processDate,5) CONTAINS '/',    
+      DATE(TIMESTAMP(DATE(TIMESTAMP(REGEXP_EXTRACT(REPLACE(REPLACE(processDate,'-',''),'Unlimited',''), '.*/([0-9]{4})$')  + '-' + 
+      LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(processDate,'-',''),'Unlimited',''), '^([0-9]{1,2}).*'),2,'0')  + '-' +
+      LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(processDate,'-',''),'Unlimited',''), '.*/([0-9]{1,2})/.*'),2,'0'))))),processDate)) AS TransactionDate,     
+      STRING(site_name) AS Ad_unit_1,
+      STRING('') AS Ad_unit_2,
+      STRING('') AS Ad_unit_3,    
+      STRING('') AS Line_item_type,    
+      STRING(size) AS Creative_size,      
+      STRING(advertiser_name) AS Advertiser,      
+      STRING(campaign_name) AS OrderName,
+      STRING('') AS Salesperson,      
+      STRING(line_item_name) AS Line_item,
+      STRING('') AS Product_template, //New Col V3      
+      STRING(site_id) AS Ad_unit_ID_1,
+      STRING('') AS Ad_unit_ID_2,
+      STRING('') AS Ad_unit_ID_3,
+      INTEGER(advertiser_id) AS Advertiser_ID,
+      INTEGER(campaign_id) AS Order_ID,
+      INTEGER('') AS Salesperson_ID,
+      INTEGER(line_item_id) AS Line_item_ID,
+      STRING('') AS Product_template_ID, //New Col V3      
+      TIMESTAMP('') AS Order_start_date,
+      TIMESTAMP('') AS Order_end_date,
+      STRING('') AS Order_PO_number,
+      TIMESTAMP('') AS Line_item_start_date,
+      TIMESTAMP('') AS Line_item_end_date,
+      STRING('') AS Agency,
+      STRING('') AS Trafficker,
+      STRING('') AS Secondary_traffickers,
+      STRING('') AS Delivery_pacing,
+      STRING('') AS Frequency_cap,
+      STRING('') AS Cost_type,
+      FLOAT(0) AS Rate_CA,
+      INTEGER(0) AS Goal_quantity,
+      INTEGER(0) AS Line_item_lifetime_impressions,
+      INTEGER(0) AS Line_item_lifetime_clicks,
+      INTEGER(0) AS Line_item_priority,
+      INTEGER(0) AS Contracted_quantity,
+      FLOAT(0) AS Discount,
+      FLOAT(0) AS Booked_revenue_exclude_CPD_CA,
+      STRING('') AS Name_Comments,
+      STRING('') AS Audience_Segment,
+      FLOAT(0) AS Delivery_indicator,
+      STRING('') AS LineItem_Type, //New Col V3     
+      STRING('') AS LineItem_Type_product, //New Col V3    
+      INTEGER(imps) AS Total_impressions,
+      INTEGER(clicks) AS Total_clicks,
+      FLOAT(revenue) AS Total_CPM_and_CPC_revenue_CA,
+      INTEGER(0) AS Total_Active_View_eligible_impressions,
+      INTEGER(0) AS Total_Active_View_viewable_impressions,
+      FLOAT(0) AS Ad_server_CPD_revenue_CA,
+      INTEGER(total_convs) AS total_convs,
+      //STRING(publisher_name) AS publisher_name, 
+ 
+      //Added 20160724
+      //OLD AccountName AS Publisher,
+      //AccountName AS APNXAccountName,
+      STRING(publisher_name) AS APNXPublisherName,
+      STRING(publisher_id) AS APNXPublisherID,
+      //END OF 20160724 
+      
+      INTEGER(placement_id) AS placement_id,
+      STRING(placement_name) AS placement_name,
+
+//---------------------------------------------
+//Platform_ID_APPNEXUS
+'AppNexus' AS PlatformNAME, 
+2 AS PlatformID, 
+
+//---------------------------------------------
+//axLineItemTypeNAME
+CASE WHEN LOWER(line_item_type) = '--' THEN '--' 
+WHEN LOWER(line_item_type) = 'ssp' THEN 'SSP'
+WHEN LOWER(line_item_type) = 'remnant' THEN 'Remnant'
+WHEN LOWER(line_item_type) = 'managed' THEN 'Managed'
+WHEN LOWER(line_item_type) = 'test' THEN 'Test'
+ELSE 'Unknown'
+END AS axLineItemTypeNAME,
+
+//axLineItemTypeID
+CASE WHEN LOWER(line_item_type) = '--' THEN 0 
+WHEN LOWER(line_item_type) = 'ssp' THEN 1 
+WHEN LOWER(line_item_type) = 'remnant' THEN 2
+WHEN LOWER(line_item_type) = 'managed' THEN 3
+WHEN LOWER(line_item_type) = 'test' THEN 98
+ELSE 99
+END AS axLineItemTypeID,
+
+//---------------------------------------------
+//BEWARE :: filter by 'Kept' and 'Resold' imp_type to match RAMP impression numbers
+//axImpTypeNAME
+CASE WHEN LOWER(imp_type) = 'blank' THEN 'Blank'
+WHEN LOWER(imp_type) = 'default' THEN 'Default'
+WHEN LOWER(imp_type) = 'kept' THEN 'Kept'
+WHEN LOWER(imp_type) = 'psa' THEN 'PSA'
+WHEN LOWER(imp_type) = 'resold' THEN 'Resold'
+WHEN LOWER(imp_type) = 'rtb' THEN 'RTB'
+ELSE 'Unknown'
+END AS axImpTypeNAME,
+
+//axImpTypeID
+CASE WHEN LOWER(imp_type) = 'blank' THEN 0
+WHEN LOWER(imp_type) = 'default' THEN 1
+WHEN LOWER(imp_type) = 'kept' THEN 2
+WHEN LOWER(imp_type) = 'psa' THEN 3
+WHEN LOWER(imp_type) = 'resold' THEN 4
+WHEN LOWER(imp_type) = 'rtb' THEN 5
+ELSE 99
+END AS axImpTypeID,
+
+//---------------------------------------------
+//axMediaTypeNAME
+CASE WHEN LOWER(media_type) = '--' THEN '--'
+WHEN LOWER(media_type) = 'banner' THEN 'Banner'
+WHEN LOWER(media_type) = 'expandable' THEN 'Expandable'
+WHEN LOWER(media_type) = 'high impact' THEN 'High Impact'
+WHEN LOWER(media_type) = 'video' THEN 'Video'
+WHEN LOWER(media_type) = 'text' THEN 'Text'
+ELSE 'Unknown'
+END AS axMediaTypeNAME,
+
+//axMediaTypeID
+CASE WHEN LOWER(media_type) = '--' THEN 0
+WHEN LOWER(media_type) = 'banner' THEN 1
+WHEN LOWER(media_type) = 'expandable' THEN 2
+WHEN LOWER(media_type) = 'high impact' THEN 3
+WHEN LOWER(media_type) = 'video' THEN 4
+WHEN LOWER(media_type) = 'text' THEN 5
+ELSE 99
+END AS axMediaTypeID,
+
+//---------------------------------------------
+
+//New column CamTypeNAME 
+//NOTE: Placeholder Code in case future usage of ROC in APNX
+CASE WHEN LOWER(media_type) = 'video' THEN 'RON'
+WHEN LOWER(line_item_type) = 'remnant' OR LOWER(payment_type) like '%revshare%' THEN 'RON' 
+WHEN LOWER(line_item_type) = 'ssp'OR LOWER(line_item_name) like '%twig%' THEN 'RON'
+WHEN LOWER(imp_type) = 'psa' OR LOWER(imp_type) = 'default' THEN 'RON'  
+WHEN LOWER(imp_type) = 'resold' THEN 'RON'     
+ELSE 'RON' END AS CamTypeNAME, 
+
+//New column CamTypeID
+CASE WHEN LOWER(media_type) = 'video' THEN 3
+WHEN LOWER(line_item_type) = 'remnant' OR LOWER(payment_type) like '%revshare%' THEN 3
+WHEN LOWER(line_item_type) = 'ssp'OR LOWER(line_item_name) like '%twig%' THEN 3
+WHEN LOWER(imp_type) = 'psa' OR LOWER(imp_type) = 'default' THEN 3  
+WHEN LOWER(imp_type) = 'resold' THEN 3     
+ELSE 3 END AS CamTypeID, 
+
+//---------------------------------------------
+//New column RevTypeNAME
+CASE WHEN LOWER(media_type) = 'video' THEN 'Managed'  
+WHEN LOWER(line_item_type) = 'remnant' OR LOWER(payment_type) like '%revshare%' THEN 'Managed'  
+WHEN LOWER(line_item_type) = 'ssp' OR LOWER(line_item_name) like '%twig%' THEN 'Managed'
+WHEN LOWER(imp_type) = 'psa' OR LOWER(imp_type) = 'default' THEN 'Managed'
+WHEN LOWER(imp_type) = 'resold' THEN  'Linked'
+ELSE 'SSP' END AS RevTypeNAME,
+
+//New column RevTypeID
+CASE WHEN LOWER(media_type) = 'video' THEN 1  
+WHEN LOWER(line_item_type) = 'remnant' OR LOWER(payment_type) like '%revshare%' THEN 1  
+WHEN LOWER(line_item_type) = 'ssp' OR LOWER(line_item_name) like '%twig%' THEN 1 
+WHEN LOWER(imp_type) = 'psa' OR LOWER(imp_type) = 'default' THEN 1
+WHEN LOWER(imp_type) = 'resold' THEN  2
+ELSE 3 END AS RevTypeID,
+
+//---------------------------------------------
+//New column ManagedNAME
+CASE WHEN LOWER(media_type) = 'video' THEN 'Unknown'  
+WHEN LOWER(line_item_type) = 'remnant' OR LOWER(payment_type) like '%revshare%' THEN 'Remnant'
+WHEN LOWER(line_item_type) = 'ssp' OR LOWER(line_item_name) like '%twig%' THEN 'SSP'
+WHEN LOWER(imp_type) = 'psa' OR LOWER(imp_type) = 'default' THEN 'House'  
+WHEN LOWER(imp_type) = 'resold' THEN 'Unknown'   
+ELSE 'Direct' END AS ManagedNAME,
+
+//New column ManagedID
+CASE WHEN LOWER(media_type) = 'video' THEN 99 
+WHEN LOWER(line_item_type) = 'remnant' OR LOWER(payment_type) like '%revshare%' THEN 3 
+WHEN LOWER(line_item_type) = 'ssp' OR LOWER(line_item_name) like '%twig%' THEN 2
+WHEN LOWER(imp_type) = 'psa' OR LOWER(imp_type) = 'default' THEN 4  
+WHEN LOWER(imp_type) = 'resold' THEN 99   
+ELSE 1 END AS ManagedID,
+
+//---------------------------------------------
+//New column AdTypeNAME
+CASE WHEN LOWER(media_type) = 'video' THEN 'Video'
+WHEN LOWER(line_item_type) = 'remnant' OR LOWER(payment_type) like '%revshare%' THEN 'Display' 
+WHEN LOWER(line_item_type) = 'ssp' OR LOWER(line_item_name) like '%twig%' THEN 'Display' 
+WHEN LOWER(imp_type) = 'psa' OR LOWER(imp_type) = 'default' THEN 'Display'
+WHEN LOWER(imp_type) = 'resold' THEN 'Display'  
+ELSE 'Display' END AS AdTypeNAME,
+
+//New column AdTypeID
+CASE WHEN LOWER(media_type) = 'video' THEN 2
+WHEN LOWER(line_item_type) = 'remnant' OR LOWER(payment_type) like '%revshare%' THEN 1 
+WHEN LOWER(line_item_type) = 'ssp' OR LOWER(line_item_name) like '%twig%' THEN 1
+WHEN LOWER(imp_type) = 'psa' OR LOWER(imp_type) = 'default' THEN 1
+WHEN LOWER(imp_type) = 'resold' THEN 1  
+ELSE 1 END AS AdTypeID,
+
+//---------------------------------------------
+//New column TechFee = $0.015 CPM WHERE ImpType = Blank, PSA, Default Error, Default, Kept, & PSA Error.
+CASE WHEN LOWER(imp_type) = 'rtb' OR LOWER(imp_type) ='psa' THEN 0
+ELSE 0.015 END AS TechFee,
+'AppNexus' AS DataSource,
+
+//AdvGrp
+//TCMAPPING HELPER COLUMNS - see JOIN table below
+CASE WHEN LOWER(Advertiser_name) LIKE LOWER('%journal metro%') THEN 'Bundle'
+WHEN LOWER(Advertiser_name) LIKE LOWER('%transcontinental media senc%') THEN 'Bundle'
+WHEN LOWER(Advertiser_name) LIKE LOWER('%transcontinental atlantic media group g.p.%') THEN 'Bundle'
+WHEN LOWER(Advertiser_name) LIKE LOWER('%transcontinental media g.p.%') THEN 'Direct'
+WHEN LOWER(Advertiser_name) LIKE LOWER('%transcontinental interactive%') THEN 'Direct'
+WHEN LOWER(Advertiser_name) LIKE LOWER('%lesaffaires%') THEN 'Direct'
+WHEN LOWER(Advertiser_name) LIKE LOWER('%transcontinental atlantic media group g.p. - 2%') THEN 'Direct'
+WHEN LOWER(Advertiser_name) LIKE LOWER('--') THEN 'External' 
+WHEN LOWER(Advertiser_name) LIKE LOWER('%tribal fusion%') THEN 'Remnants'
+WHEN LOWER(Advertiser_name) LIKE LOWER('%redux media inc.%') THEN 'Remnants'
+WHEN LOWER(Advertiser_name) LIKE LOWER('%advertising.com - marketplace%') THEN 'Remnants'
+WHEN LOWER(Advertiser_name) LIKE LOWER('%advertising.com uk%') THEN 'Remnants'
+WHEN LOWER(Advertiser_name) LIKE LOWER('%lighthouse media%') THEN 'Remnants'
+ELSE 'Unknown' 
+END AS TCAdvertiserGroup,
+
+//CampSrc 
+//From: Traffic_Analysis_DFP_V01.xlsx
+CASE WHEN LOWER( Advertiser_name ) LIKE LOWER('%header bidding%') THEN 'Header Bidding'
+WHEN LOWER( Advertiser_name ) LIKE LOWER('%- house%') THEN 'House'
+WHEN LOWER( Advertiser_name ) LIKE LOWER('%house 2010%') THEN 'House'
+WHEN LOWER( Advertiser_name ) LIKE LOWER('%obj house%') THEN 'House'
+WHEN LOWER( Advertiser_name ) LIKE LOWER('%remnant%') THEN 'Remnants'
+WHEN LOWER( Advertiser_name ) LIKE LOWER('%remnant') THEN 'Remnants'
+WHEN LOWER( Advertiser_name ) LIKE LOWER('%test%') THEN 'Test'
+WHEN LOWER( Advertiser_name ) = LOWER('-') THEN 'Unknown'
+ELSE 'Direct'
+END AS TCCampSrc,
+
+//_Final installed 20160729
+INTEGER(imps) AS IMPS_Final,
+INTEGER(clicks) AS CLICKS_Final,
+FLOAT(revenue) AS REVS_CPMCPC_Final,
+FLOAT(0) AS REVS_CPD_Final
+
+FROM ManagedServices_APNX.APPNEXUS_NETWORK_20160811
+//Save Output to: ManagedServices_APNX.APPNEXUS_NETWORK_JOIN_20160xxx
+) AS A
+JOIN ramp_reference.siteMapping_v9 as B //NEW 20160803 
+ON A.Ad_unit_ID_1 = B.AdUnitID 
+IGNORE CASE
+//LIMIT 100
+
+//Using siteMapping_v7
+//20160810 
+//REVS_Final & IMPS_Final 

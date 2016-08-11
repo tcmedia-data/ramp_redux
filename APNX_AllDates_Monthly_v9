@@ -1,0 +1,8 @@
+//APNX_AllDates_Monthly_v8
+//COMBINE APNX Daily Files into one MONTHLY
+SELECT * FROM 
+(TABLE_DATE_RANGE( ManagedServices_APNX.APPNEXUS_NETWORK_JOIN_, TIMESTAMP('2016-08-01'), TIMESTAMP('2016-08-10')))
+WHERE TransactionDate IS NOT NULL
+//Save Output to: ManagedServices_APNX.APPNEXUS_NETWORK_Monthly_20160x01
+
+
