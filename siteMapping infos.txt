@@ -1,0 +1,17 @@
+URL to get the sitemapping: https://na4.salesforce.com/00O60000004kXAD
+
+save to this folder: \\SRLVFPS01\Partage_Web\JamesT\_ManagedServicesPerformance\lookup_data\SiteMapping
+
+APPEND THE FILE TO A NEW TAB IN HERE: siteMapping_WorkVersion_20160727.xlsx
+
+ADD THE LAST 5 YELLOW COLUMNS AND COPY DOWN THE FORMULAS
+ 
+COPY THE TAB INTO A NEW FILE AND NAME IT: siteMapping_v10.csv
+
+UPLOAD TO GCS.
+
+USE THIS RECIPE TO TRANSFER FROM GCS TO BQ: 
+\\SRLVFPS01\Partage_Web\JamesT\_ManagedServicesPerformance\BigQuery Recipes\BigQuery_APNX-DFP_Recipes.xlsx
+
+USE THE TAB NAMED : siteMapping
+
