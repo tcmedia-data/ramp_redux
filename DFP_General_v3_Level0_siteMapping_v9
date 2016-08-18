@@ -383,7 +383,7 @@ END AS TCCampSrc
 
 
 //LevelOne=0 
-FROM ManagedServices_DFP.DFP_General_20160810
+FROM ManagedServices_DFP.DFP_General_20160615
 //Saves in ManagedServices_DFP.DFP_GENERAL_Level0_20160xxx
 
 WHERE LOWER(TransactionDate) NOT LIKE '%total%'
@@ -393,7 +393,8 @@ ORDER BY TransactionDate ASC) AS A
 JOIN ramp_reference.siteMapping_v9 as B //OK 20160810
 ON A.Ad_unit_ID_2 = B.AdUNitID
 WHERE //PlatformNAME = 'DFP' AND 
-LevelOne=0 AND (Creative_size NOT IN ('0x0','1x1'))
+LevelOne=0 AND (Creative_size NOT IN ('0x0')) //VERIFY THIS RULE WITH FRED LATER --REMOVED 1x1
+--AND B.AdUNitID in (111109845,111109605)
 //VALIDATION 
 //AND Total_impressions IS NULL
 ORDER BY Ad_unit_1 ASC, Ad_unit_2 ASC
