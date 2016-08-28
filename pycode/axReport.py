@@ -120,9 +120,9 @@ def main(argv):
         elif opt in ("-e", "--edate"):
             enddate = arg
 
-    outfile = '/Users/tweediej/upload/APPNEXUS_NETWORK_20160731.csv'
-    startdate='2016-07-31'
-    enddate = '2016-08-01'
+    #outfile = '/Users/tweediej/upload/APPNEXUS_NETWORK_20160731.csv'
+    #startdate='2016-07-31'
+    #enddate = '2016-08-01'
 
 
     buildReport(startdate, enddate,outfile)
