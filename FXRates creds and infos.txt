@@ -1,9 +1,14 @@
 https://www.oanda.com/solutions-for-business/historical-rates-beta/hcc.html
 
+EXPIRED
 frederic.gilbert@tc.tc
 U...m
-
+EXPIRED
 james.tweedie@tc.tc
+Dumbpassw0rd
+
+OK UNTIL 20190927
+dina.santina@tc.tc
 Dumbpassw0rd
 
 Files to save the rates to: 
@@ -12,6 +17,10 @@ FXRates_USD2CAD.csv
 
 Folder to save the files into:
 \\SRLVFPS01\Partage_Web\JamesT\_ManagedServicesPerformance\lookup_data\Currency Exchange Rate
+
+
+
+
 
 
 
