@@ -1,7 +1,7 @@
-//APNXDFP_UNION_wFXRates_Monthly_v8
+//APNXDFP_UNION_wFXRates_Monthly_v10
 //Step 1: UNION of ManagedServices_DFPGeneral.DFP_GENERAL_LevelALL + ManagedServices.APPNEXUS_NETWORK_JOIN
 //Step 2: JOIN of ramp_reference.FXRates
-//20160810
+//20160830
 
 ////UNION DFP
 SELECT
@@ -42,7 +42,7 @@ Line_item_lifetime_clicks,
 Line_item_priority, 
 Contracted_quantity,
 Discount,
-Booked_revenue_exclude_CPD_CA,
+//Booked_revenue_exclude_CPD_CA, Removed 20160830
 Name_Comments,
 Audience_Segment,
 LineItem_Type,
@@ -206,7 +206,7 @@ INTEGER(Line_item_lifetime_clicks) AS  Line_item_lifetime_clicks,
 INTEGER(Line_item_priority) AS Line_item_priority, 
 INTEGER(Contracted_quantity) AS Contracted_quantity,
 FLOAT(Discount) AS Discount,
-FLOAT(Booked_revenue_exclude_CPD_CA) AS Booked_revenue_exclude_CPD_CA,
+// FLOAT(Booked_revenue_exclude_CPD_CA) AS Booked_revenue_exclude_CPD_CA, Removed 20160830
 Name_Comments,
 Audience_Segment,
 LineItem_Type, 
@@ -323,7 +323,7 @@ INTEGER(Line_item_lifetime_clicks) AS  Line_item_lifetime_clicks,
 INTEGER(Line_item_priority) AS Line_item_priority, 
 INTEGER(Contracted_quantity) AS Contracted_quantity,
 FLOAT(Discount) AS Discount,
-FLOAT(Booked_revenue_exclude_CPD_CA) AS Booked_revenue_exclude_CPD_CA,
+//FLOAT(Booked_revenue_exclude_CPD_CA) AS Booked_revenue_exclude_CPD_CA, Removed 20160830
 Name_Comments,
 Audience_Segment,
 LineItem_Type, 
