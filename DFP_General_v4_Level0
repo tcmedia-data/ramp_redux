@@ -1,5 +1,4 @@
-//DFP_General_v4_Level0_siteMapping_v10
-//20160831
+//DFP_General_v4_Level0_siteMapping_v12
 //ADDED MASTER COMPANION COLS
 //Use siteMapping without version number
 
@@ -10,10 +9,16 @@ Ad_unit_2,
 Ad_unit_3,
 Line_item_type,
 
-//Creative_size, ////20160829 ADDED CLAUDE
+//ADDED 20160831 FOR 'sizeless' PURPOSES
+STRING('') AS placement_name, 
+STRING('') AS placement_id,
+AliasName,
+SiteID,
+Creative_size,
 CASE WHEN LOWER( Advertiser ) LIKE LOWER('%bidding%') THEN 'sizeless'
 ELSE Creative_size
-END AS Creative_size,
+END AS Creative_size_FINAL,
+//END OF 20160831 FOR 'sizeless' PURPOSES
 
 Advertiser,
 OrderName,
@@ -100,11 +105,20 @@ LevelOne,
 ID1,
 ID2,
 
+//ADDED 20160901
+CASE WHEN AssociatedBU_AccountName IS NULL THEN AccountName
+ELSE AssociatedBU_AccountName
+END AS AssociatedBU,
+PartnershipType,
+SiteAliasID,
+//END OF 20160901
+
 //Added 20160724
 //OLD AccountName AS Publisher,
-AccountName AS APNXAccountName,
-STRING('') AS APNXPublisherName,
-STRING('') AS APNXPublisherID,
+AccountName,
+AccountID,
+STRING('') AS PublisherName,
+STRING('') AS PublisherID,
 //AccountName AS APNXPublisherName,
 //AdUnitID AS APNXPublisherID,
 //END OF 20160724
@@ -158,6 +172,8 @@ Total_clicks,
 
 //IMPS_Final 
 CASE WHEN Passback = 1 THEN 0
+WHEN LOWER(OrderName) LIKE LOWER('%passback%') THEN 0
+WHEN LOWER(Line_item) LIKE LOWER('%passback%') THEN 0
 WHEN LOWER(Advertiser) LIKE LOWER('%passback%') THEN 0
 WHEN LOWER(ImpressionSource) <> LOWER('DFP') THEN 0           ////ADDED CLAUDE 20160809 
 WHEN LOWER(Master_Companion) = LOWER('Companion') THEN 0      ////ADDED CLAUDE 20160829 
@@ -219,9 +235,7 @@ Master_Companion_Creative, //New Col V4 20160829
 STRING(Ad_unit_ID_1) AS Ad_unit_ID_1,
 STRING(Ad_unit_ID_2) AS Ad_unit_ID_2,
 STRING(Ad_unit_ID_3) AS Ad_unit_ID_3,
-//STRING(Ad_unit_ID_1) AS Ad_unit_ID_1,
-//STRING(Ad_unit_ID_2) AS Ad_unit_ID_2,
-//STRING(Ad_unit_ID_3) AS Ad_unit_ID_3,
+
 INTEGER(Advertiser_ID) AS Advertiser_ID,
 INTEGER(REPLACE(Order_ID,'-','0')) AS Order_ID, 
 INTEGER(Salesperson_ID) AS Salesperson_ID,
@@ -304,7 +318,7 @@ FLOAT(Total_CPM_and_CPC_revenue_CA) AS Total_CPM_and_CPC_revenue_CA,
 FLOAT(REPLACE(REPLACE(REPLACE(REPLACE(Delivery_indicator,'N/A','0.0'),'-','0.0'),'%',''),' ','')) AS Delivery_indicator,
 INTEGER(Total_Active_View_eligible_impressions) AS Total_Active_View_eligible_impressions,
 INTEGER(Total_Active_View_viewable_impressions) AS Total_Active_View_viewable_impressions,
-//
+
 //Added 20160804
 INTEGER(Ad_server_impressions) AS Ad_server_impressions,
 INTEGER(Ad_server_clicks) AS Ad_server_clicks,
@@ -323,7 +337,7 @@ FLOAT(Ad_Exchange_revenue_CA) AS Ad_Exchange_revenue_CA,
 INTEGER(Ad_Exchange_Active_View_eligible_impressions) AS Ad_Exchange_Active_View_eligible_impressions,
 INTEGER(Ad_Exchange_Active_View_viewable_impressions) AS Ad_Exchange_Active_View_viewable_impressions,
 //End of Added 20160804 
-//
+
 CASE WHEN LOWER(Advertiser) LIKE LOWER('%google%remnant%') THEN 'ADX'
 WHEN LOWER(Advertiser) LIKE LOWER('%sm dfp%') THEN 'SM DFP'
 //WHEN ImpressionSource = 'DFP' AND LOWER(Advertiser) LIKE LOWER('%appNexus%remnant%') THEN 'DFP' ////CHANGED CLAUDE 20160809 from 'AppNexus'
@@ -404,10 +418,10 @@ WHEN LOWER( Advertiser ) = LOWER('-') THEN 'Unknown'
 ELSE 'Direct'
 END AS TCCampSrc
 
-
 //LevelOne=0 
-FROM ManagedServices_DFP.DFP_General_20160830
-//Saves in ManagedServices_DFP.DFP_GENERAL_Level0_20160xxx
+FROM ManagedServices_DFP.DFP_General_20160901
+//SAVE IN: ManagedServices_DFP.DFP_GENERAL_Level0_20160xxx
+//IF TESTING, SAVE IN: ManagedServices_DFP.DFP_GENERAL_Level0_TEST_20160xxx 
 
 WHERE LOWER(TransactionDate) NOT LIKE '%total%'
 //FOR VALIDATION ONLY 
@@ -428,4 +442,3 @@ IGNORE CASE
 //LIMIT 100
 //ADDED MASTER COMPANION COLS V4
 //Use siteMapping without version number
-//20160831
