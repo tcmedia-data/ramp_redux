@@ -1,5 +1,4 @@
-//DFP_General_v4_Level0_siteMapping_v10
-//20160831
+//DFP_General_v4_Level0_siteMapping_v12
 //ADDED MASTER COMPANION COLS
 //Use siteMapping without version number
 
@@ -10,10 +9,16 @@ Ad_unit_2,
 Ad_unit_3,
 Line_item_type,
 
-//Creative_size, //20160829 REQUIRED BY CLAUDE
+//ADDED 20160831 FOR 'sizeless' PURPOSES
+STRING('') AS placement_name, 
+STRING('') AS placement_id,
+AliasName,
+SiteID,
+Creative_size,
 CASE WHEN LOWER( Advertiser ) LIKE LOWER('%bidding%') THEN 'sizeless'
 ELSE Creative_size
-END AS Creative_size,
+END AS Creative_size_FINAL,
+//END OF 20160831 FOR 'sizeless' PURPOSES
 
 Advertiser,
 OrderName,
@@ -100,11 +105,20 @@ LevelOne,
 ID1,
 ID2,
 
+//ADDED 20160901
+CASE WHEN AssociatedBU_AccountName IS NULL THEN AccountName
+ELSE AssociatedBU_AccountName
+END AS AssociatedBU,
+PartnershipType,
+SiteAliasID,
+//END OF 20160901
+
 //Added 20160724
 //OLD AccountName AS Publisher,
-AccountName AS APNXAccountName,
-STRING('') AS APNXPublisherName,
-STRING('') AS APNXPublisherID,
+AccountName,
+AccountID,
+STRING('') AS PublisherName,
+STRING('') AS PublisherID,
 //AccountName AS APNXPublisherName,
 //AdUnitID AS APNXPublisherID,
 //END OF 20160724
@@ -219,9 +233,7 @@ Master_Companion_Creative, //New Col V4 20160829
 STRING(Ad_unit_ID_1) AS Ad_unit_ID_1,
 STRING(Ad_unit_ID_2) AS Ad_unit_ID_2,
 STRING(Ad_unit_ID_3) AS Ad_unit_ID_3,
-//STRING(Ad_unit_ID_1) AS Ad_unit_ID_1,
-//STRING(Ad_unit_ID_2) AS Ad_unit_ID_2,
-//STRING(Ad_unit_ID_3) AS Ad_unit_ID_3,
+
 INTEGER(Advertiser_ID) AS Advertiser_ID,
 INTEGER(REPLACE(Order_ID,'-','0')) AS Order_ID, 
 INTEGER(Salesperson_ID) AS Salesperson_ID,
@@ -405,8 +417,9 @@ ELSE 'Direct'
 END AS TCCampSrc
 
 //LevelOne=1
-FROM ManagedServices_DFP.DFP_General_20160830
-//Saves in ManagedServices_DFP.DFP_GENERAL_Level1_20160xxx
+FROM ManagedServices_DFP.DFP_General_20160901
+//SAVE IN: ManagedServices_DFP.DFP_GENERAL_Level1_20160xxx
+//IF TESTING, SAVE IN: ManagedServices_DFP.DFP_GENERAL_Level0_TEST_20160xxx 
 
 WHERE LOWER(TransactionDate) NOT LIKE '%total%'
 //FOR VALIDATION ONLY
@@ -421,4 +434,3 @@ IGNORE CASE
 //LIMIT 100
 //ADDED MASTER COMPANION COLS V4
 //Use siteMapping without version number
-//20160831
