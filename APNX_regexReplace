@@ -1,6 +1,6 @@
-//APNX_regexReplace_v10
-//20160830
-//REVS_Final & IMPS_Final 
+//APNX_regexReplace_v11
+//20160831
+//placement_name ADDED 20160831 FOR 'sizeless' PURPOSES
 //Use siteMapping without version number from now on 
 
 SELECT 
@@ -9,7 +9,16 @@ Ad_unit_1,
 Ad_unit_2,
 Ad_unit_3,
 Line_item_type,
+
+//ADDED 20160831 FOR 'sizeless' PURPOSES
+placement_name, 
+placement_id,
+AliasName,
+SiteID,
 Creative_size,
+Creative_size AS Creative_size_FINAL, 
+//END OF 20160831 FOR 'sizeless' PURPOSES
+
 Advertiser,
 OrderName,
 Salesperson,
@@ -87,11 +96,19 @@ LevelOne,
 ID1,
 ID2,
 
+//ADDED 20160901
+CASE WHEN AssociatedBU_AccountName IS NULL THEN AccountName
+ELSE AssociatedBU_AccountName
+END AS AssociatedBU,
+PartnershipType,
+SiteAliasID,
+//END OF 20160901
+
 //Added 20160724
 //OLD AccountName AS Publisher,
-AccountName AS APNXAccountName,
-APNXPublisherName,
-APNXPublisherID,
+AccountName,
+PublisherName,
+PublisherID,
 //END OF 20160724
 
 SitePropertyName AS Site,
@@ -240,8 +257,8 @@ IF(RIGHT(processDate,5) CONTAINS '/',
       //Added 20160724
       //OLD AccountName AS Publisher,
       //AccountName AS APNXAccountName,
-      STRING(publisher_name) AS APNXPublisherName,
-      STRING(publisher_id) AS APNXPublisherID,
+      STRING(publisher_name) AS PublisherName,
+      STRING(publisher_id) AS PublisherID,
       //END OF 20160724 
       
       INTEGER(placement_id) AS placement_id,
@@ -427,8 +444,10 @@ INTEGER(clicks) AS CLICKS_Final,
 FLOAT(revenue) AS REVS_CPMCPC_Final,
 FLOAT(0) AS REVS_CPD_Final
 
-FROM ManagedServices_APNX.APPNEXUS_NETWORK_20160608
+FROM ManagedServices_APNX.APPNEXUS_Network_20160905
 //Save Output to: ManagedServices_APNX.APPNEXUS_NETWORK_JOIN_20160xxx
+//IF TESTING, SAVE IN: ManagedServices_APNX.APPNEXUS_NETWORK_TEST_20160xxx 
+
 ) AS A
 JOIN ramp_reference.siteMapping as B //20160831 Use siteMapping without version number  
 ON A.Ad_unit_ID_1 = B.AdUnitID 
@@ -436,5 +455,4 @@ IGNORE CASE
 //LIMIT 100
 
 //Use siteMapping without version number from now on 
-//20160830 
-//REVS_Final & IMPS_Final 
+//placement_name ADDED 20160831 FOR 'sizeless' PURPOSES
