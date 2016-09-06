@@ -18,7 +18,7 @@ Ad_unit_1,
 //AliasName,
 //SiteID,
 //Creative_size,
-Creative_size_FINAL, //ADDED FOR 'sizeless' in DFP
+Creative_size_Final, //ADDED FOR 'sizeless' in DFP
 //END OF 20160831 FOR 'sizeless' PURPOSES
 
 Advertiser,
@@ -198,7 +198,7 @@ Ad_unit_1,
 //AliasName,
 //SiteID,
 //Creative_size,
-Creative_size_FINAL, //ADDED FOR 'sizeless' in DFP
+Creative_size_FINAL as Creative_size_Final, //ADDED FOR 'sizeless' in DFP
 //END OF 20160831 FOR 'sizeless' PURPOSES
 
 Advertiser,
@@ -334,7 +334,7 @@ Ad_unit_1,
 //AliasName,
 //SiteID,
 //Creative_size,
-Creative_size_FINAL, //ADDED FOR 'sizeless' in DFP
+Creative_size_FINAL as Creative_size_Final, //ADDED FOR 'sizeless' in DFP
 //END OF 20160831 FOR 'sizeless' PURPOSES
 
 Advertiser,
