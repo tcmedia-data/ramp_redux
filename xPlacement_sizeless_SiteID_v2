@@ -1,0 +1,134 @@
+SELECT AliasName,PlatformNAME,Creative_size_Final
+//,Total_impressions
+,Imps_Final
+,Imps_RunningTotal
+,CASE WHEN Creative_size_Final ='sizeless' AND PlatformNAME = 'DFP' THEN Imps_RunningTotal6 
+ WHEN Creative_size_Final NOT LIKE '%sizeless%' AND PlatformNAME = 'AppNexus' THEN Imps_RunningTotal3
+ ELSE Imps_RunningTotal3 END AS Imps_Final_Sizeless
+FROM (
+
+SELECT AliasName,SiteID,PlatformNAME,Creative_size_Final
+,Total_impressions
+,Imps_Final
+,Imps_RunningTotal
+,Imps_RunningTotal2
+,Imps_RunningTotal3
+,Imps_RunningTotal4
+,Imps_RunningTotal5
+,(MAX(Imps_RunningTotal4)-MAX(Imps_RunningTotal5)) AS Imps_RunningTotal6
+
+FROM (
+
+////E
+SELECT AliasName,SiteID,PlatformNAME,Creative_size_Final
+,Total_impressions
+,Imps_Final
+,Imps_RunningTotal
+,SUM(Imps_RunningTotal2) AS Imps_RunningTotal2
+,SUM(Imps_RunningTotal3) AS Imps_RunningTotal3
+,SUM(Imps_RunningTotal2) OVER (PARTITION BY SiteID) AS Imps_RunningTotal4
+,SUM(Imps_RunningTotal3) OVER (PARTITION BY SiteID) AS Imps_RunningTotal5
+//,SUM(Revs_CPMCPC_Final) AS Revs_CPMCPC_Final 
+FROM (
+
+SELECT AliasName,SiteID,PlatformNAME,Creative_size_Final
+,Total_impressions
+,Imps_Final
+,Imps_RunningTotal
+,CASE WHEN Creative_size_Final ='sizeless' AND PlatformNAME = 'DFP' THEN Imps_Final 
+ELSE 0 END AS Imps_RunningTotal2
+,CASE WHEN Creative_size_Final <>'sizeless' AND PlatformNAME <> 'DFP' THEN Imps_Final 
+ELSE 0 END AS Imps_RunningTotal3
+//,SUM(Revs_CPMCPC_Final) AS Revs_CPMCPC_Final 
+FROM (
+
+SELECT * FROM (
+//AS B
+
+SELECT AliasName,SiteID,PlatformNAME,Creative_size_Final
+,SUM(Total_impressions) AS Total_impressions
+,SUM(Imps_Final) AS Imps_Final
+,SUM(Imps_Final) OVER(PARTITION BY SiteID) AS Imps_RunningTotal
+FROM (
+
+SELECT * FROM (
+//AS A
+//DFP
+SELECT TransactionDate, PlatformNAME, placement_name, AliasName, SiteID,  Ad_unit_ID_1, Ad_unit_ID_2, Advertiser, Creative_size, Creative_size_Final
+,Total_impressions
+,Imps_Final
+//,Revs_CPMCPC_Final
+FROM [extreme-pixel-830:ManagedServices_DFP.DFP_GENERAL_LevelALL_20160801] 
+//WHERE SiteID IN ('a1F60000004Czma','a1F60000004Cztm','a1F60000004D4R4') 
+WHERE LOWER(Creative_size_Final) LIKE LOWER('%sizeless%')
+ORDER BY TransactionDate ASC, AliasName ASC, Advertiser ASC, Creative_size ASC
+    ) AS A,
+    
+    (SELECT * FROM (  
+//AS B
+//APNX
+SELECT TransactionDate, PlatformNAME,placement_name, AliasName, SiteID, Ad_unit_ID_1, Ad_unit_ID_2, Advertiser,Creative_size, Creative_size as Creative_size_Final
+,Total_impressions
+,Total_impressions AS Imps_Final
+//,REVS_CPMCPC_Final
+FROM ManagedServices_APNX.APPNEXUS_NETWORK_Monthly_20160801
+//WHERE SiteID IN ('a1F60000004Czma','a1F60000004Cztm','a1F60000004D4R4')
+WHERE (LOWER(placement_name) LIKE LOWER('%- hb%')
+OR LOWER(placement_name) LIKE LOWER('%sizeless%'))
+ORDER BY TransactionDate ASC, placement_name ASC, Advertiser ASC, Creative_size ASC
+))) AS B
+
+GROUP BY AliasName,SiteID,Creative_size_Final,PlatformNAME
+ORDER BY Creative_size_Final ASC
+
+) AS C
+GROUP BY AliasName,SiteID,Creative_size_Final,PlatformNAME
+,Total_impressions
+,Imps_Final
+,Imps_RunningTotal
+ORDER BY Creative_size_Final ASC
+
+) AS D
+GROUP BY AliasName,SiteID,Creative_size_Final,PlatformNAME
+,Total_impressions
+,Imps_Final
+,Imps_RunningTotal
+,Imps_RunningTotal2
+,Imps_RunningTotal3
+ORDER BY Creative_size_Final ASC
+
+) AS E
+GROUP BY AliasName,SiteID,Creative_size_Final,PlatformNAME
+,Total_impressions
+,Imps_Final
+,Imps_RunningTotal
+ORDER BY SiteID,Creative_size_Final ASC
+
+) AS F
+GROUP BY AliasName,SiteID,Creative_size_Final,PlatformNAME
+,Total_impressions
+,Imps_Final
+,Imps_RunningTotal
+,Imps_RunningTotal2
+,Imps_RunningTotal3
+,Imps_RunningTotal4
+,Imps_RunningTotal5
+ORDER BY Creative_size_Final ASC
+
+) AS G
+GROUP BY AliasName,SiteID,Creative_size_Final,PlatformNAME
+,Total_impressions
+,Imps_Final
+,Imps_RunningTotal
+,Imps_RunningTotal6
+,Imps_Final_Sizeless
+ORDER BY SiteID ASC, Creative_size_Final ASC
+
+//AS A
+//JOIN ramp_reference.FXRates AS B
+//ON A.TransactionDate = B.FXDate
+//LIMIT 1000
+
+
+//Save Output to: ManagedServicesProcessed.APNXDFP_HB_SiteID_20160x01 
+//Use This Query to view: APNXDFP_SIZELESS_SiteID 
