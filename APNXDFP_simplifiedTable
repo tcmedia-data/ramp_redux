@@ -6,25 +6,25 @@
 
 ////UNION DFP
 SELECT
-TransactionDate,
-Ad_unit_1,
+Transaction_Date,
+Ad_Unit_1,
 //Ad_unit_2,
 //Ad_unit_3,
 //Line_item_type,
 
 //ADDED 20160831 FOR 'sizeless' PURPOSES
-//placement_name, 
+placement_name AS Placement_Name,
 //placement_id,
 //AliasName,
-//SiteID,
+SiteID,
 //Creative_size,
-Creative_size_Final, //ADDED FOR 'sizeless' in DFP
+Creative_Size_Final, //ADDED FOR 'sizeless' in DFP
 //END OF 20160831 FOR 'sizeless' PURPOSES
 
 Advertiser,
-OrderName,
+Order_Name,
 Salesperson,
-Line_item,
+Line_Item,
 //Product_template, //New Col V3
 //Ad_unit_ID_1,
 //Ad_unit_ID_2,
@@ -34,49 +34,49 @@ Line_item,
 //Salesperson_ID,
 //Line_item_ID,
 //Product_template_ID, //New Col V3
-Order_start_date,
-Order_end_date,
+Order_Start_Date,
+Order_End_Date,
 //Order_PO_number,
 Agency,
 Trafficker,
-Secondary_traffickers,
+Secondary_Traffickers,
 //Delivery_pacing,
 //Frequency_cap,
-Line_item_start_date,
-Line_item_end_date,
-Cost_type,
+Line_Item_Start_Date,
+Line_Item_End_Date,
+Cost_Type,
 Rate_CA,
-Goal_quantity,
+Goal_Quantity,
 //Line_item_lifetime_impressions,
 //Line_item_lifetime_clicks,
 //Line_item_priority, 
-Contracted_quantity,
+Contracted_Quantity,
 Discount,
 //Booked_revenue_exclude_CPD_CA, Removed 20160830
 Name_Comments,
 Audience_Segment,
-LineItem_Type,
-LineItem_Type_product,
+Line_Item_Type,
+Line_Item_Type_Product,
 //Delivery_indicator,
 //Total_Active_View_eligible_impressions,
 //Total_Active_View_viewable_impressions,
-PlatformNAME, 
-PlatformID,
-axLineItemTypeNAME,
+PlatformNAME AS Platform_Name, 
+PlatformID AS Platform_ID,
+axLineItemType_Name,
 //axLineItemTypeID,
-axImpTypeNAME,
+axImpType_Name,
 //axImpTypeID,
-axMediaTypeNAME,
+axMediaType_Name,
 //axMediaTypeID,
-CamTypeNAME,
+CamType_Name,
 //CamTypeID,
-RevTypeNAME,
+RevType_Name,
 //RevTypeID,
-ManagedNAME,
+Managed_Name,
 //ManagedID,
-AdTypeNAME,
+AdType_Name,
 //AdTypeID,
-TechFee,
+//TechFee,
 DataSource,
 //LevelOne,
 //ID1,
@@ -84,46 +84,46 @@ DataSource,
 
 //ADDED 20160901
 AssociatedBU,
-PartnershipType,
+Partnership_Type,
 //SiteAliasID,
 //END OF 20160901
 
-AccountName,
-PublisherName,
+Account_Name,
+Publisher_Name,
 //APNXPublisherID,
 Site,
 //Site_ID,
 //Site_ID_calc,
 //Adv,
 DisplayRevShare,
-TCAdvertiserGroup,
+Advertiser_Group,
 //TCBusinessUnit,
 //TCPublisher,
 //TCSite,
 //PARTNERGroup,
-TCCampSrc,
-ImpressionSource,
+Campaign_Source,
+Impression_Source,
 //Passback,
-ContainerSource,
+Container_Source,
 
 //METRICS
-Ad_server_impressions,
-Ad_server_clicks,
-AdSense_impressions,
-AdSense_clicks,
-Ad_Exchange_impressions,
-Ad_Exchange_clicks,
+Ad_Server_Impressions,
+Ad_Server_Clicks,
+AdSense_Impressions,
+AdSense_Clicks,
+Ad_Exchange_Impressions,
+Ad_Exchange_Clicks,
 //Ad_server_CPM_and_CPC_revenue_CA,
 //Ad_server_CPD_revenue_CA,
 //AdSense_revenue_CA,
 //Ad_Exchange_revenue_CA,
 //Total_CPM_and_CPC_revenue_CA,
-Total_impressions,
-Total_clicks,
-IMPS_Final,
-CLICKS_Final,
-REVS_CPMCPC_Final,
-REVS_CPD_Final,
+Total_Impressions,
+Total_Clicks,
+Imps_Final,
+Clicks_Final,
+//REVS_CPMCPC_Final,
+//REVS_CPD_Final,
 //End of Added 20160801
 //-----------------------------
 //FXRates Start
@@ -132,49 +132,58 @@ USD2CAD,
 
 CASE WHEN PlatformID IN (1,3) THEN 'CAD'
 ELSE 'USD' 
-END AS CURRENCY,
+END AS Currency,
 
 ////REVS_Final IN CAD
+
 ////REVS_CPMCPC_Final replace Total_CPM_and_CPC_revenue_CA
 CASE WHEN PlatformID IN (1,3) THEN  REVS_CPMCPC_Final
 ELSE (REVS_CPMCPC_Final * USD2CAD)
-END AS REVS_CPMCPC_CAD_Final,
+END AS Revs_CPMCPC_CAD_Final,
+
 ////REVS_CPD_Final replace Ad_server_CPD_revenue_CA
 CASE WHEN PlatformID IN (1,3) THEN REVS_CPD_Final
 ELSE (REVS_CPD_Final * USD2CAD)
-END AS REVS_CPD_CAD_Final,
+END AS Revs_CPD_CAD_Final,
 
 ////CAD REVS_Final IN USD
+
 ////REVS_CPMCPC_Final replace Total_CPM_and_CPC_revenue_CA
 CASE WHEN PlatformID IN (1,3) THEN (REVS_CPMCPC_Final * CAD2USD)
 ELSE REVS_CPMCPC_Final
-END AS REVS_CPMCPC_CAD2USD_Final,
+END AS Revs_CPMCPC_CAD2USD_Final,
+
 ////REVS_CPD_Final replace Ad_server_CPD_revenue_CA
 CASE WHEN PlatformID IN (1,3) THEN  (REVS_CPD_Final * CAD2USD)
 ELSE REVS_CPD_Final
-END AS REVS_CPD_CAD2USD_Final,
+END AS Revs_CPD_CAD2USD_Final,
 
 ////REVS_Final IN USD
+
 ////REVS_CPMCPC_Final replace Total_CPM_and_CPC_revenue_CA
 CASE WHEN PlatformID=2 THEN REVS_CPMCPC_Final
 ELSE (REVS_CPMCPC_Final * CAD2USD)
-END AS REVS_CPMCPC_USD_Final,
+END AS Revs_CPMCPC_USD_Final,
+
 ////REVS_CPD_Final replace Ad_server_CPD_revenue_CA
 CASE WHEN PlatformID=2 THEN REVS_CPD_Final
 //ELSE (Ad_server_CPD_revenue_CA * CAD2USD)
 ELSE (REVS_CPD_Final * CAD2USD)   
-END AS REVS_CPD_USD_Final,
+END AS Revs_CPD_USD_Final,
 
 ////USD REVS_Final IN CAD
+
 ////REVS_CPMCPC_Final replace Total_CPM_and_CPC_revenue_CA
 CASE WHEN PlatformID=2 THEN (REVS_CPMCPC_Final * USD2CAD)
 ELSE REVS_CPMCPC_Final
-END AS REVS_CPMCPC_USD2CAD_Final,
+END AS Revs_CPMCPC_USD2CAD_Final,
+
 ////REVS_CPD_Final replace Ad_server_CPD_revenue_CA
+
 CASE WHEN PlatformID=2 THEN (REVS_CPD_Final * USD2CAD)
 //ELSE Ad_server_CPD_revenue_CA
-ELSE REVS_CPD_Final
-END AS REVS_CPD_USD2CAD_Final
+ELSE Revs_CPD_Final
+END AS Revs_CPD_USD2CAD_Final
 //FXRates End
 ////--------------------------------
 
@@ -186,25 +195,25 @@ SELECT
     *
   FROM (
     SELECT
-DATE(TransactionDate) AS TransactionDate,
-Ad_unit_1,
+DATE(TransactionDate) AS Transaction_Date,
+Ad_unit_1 AS Ad_Unit_1,
 //Ad_unit_2,
 //Ad_unit_3,
 //Line_item_type,
 
 //ADDED 20160831 FOR 'sizeless' PURPOSES
-//placement_name, 
+placement_name AS Placement_Name, 
 //STRING(placement_id) AS placement_id,
 //AliasName,
-//SiteID,
+SiteID,
 //Creative_size,
-Creative_size_FINAL as Creative_size_Final, //ADDED FOR 'sizeless' in DFP
+Creative_size_FINAL as Creative_Size_Final, //ADDED FOR 'sizeless' in DFP
 //END OF 20160831 FOR 'sizeless' PURPOSES
 
 Advertiser,
-OrderName,
+OrderName AS Order_Name,
 Salesperson,
-Line_item,
+Line_Item,
 //Product_template,
 //STRING(Ad_unit_ID_1) AS Ad_unit_ID_1,
 //STRING(Ad_unit_ID_2) AS Ad_unit_ID_2,
@@ -214,29 +223,29 @@ Line_item,
 //INTEGER(Salesperson_ID) AS Salesperson_ID,
 //INTEGER(Line_item_ID) AS Line_item_ID,
 //INTEGER(Product_template_ID) AS Product_template_ID,
-DATE(Order_start_date) AS Order_start_date,
-DATE(Order_end_date) AS Order_end_date,
+DATE(Order_start_date) AS Order_Start_Date,
+DATE(Order_end_date) AS Order_End_Date,
 //Order_PO_number,
 Agency,
 Trafficker,
-Secondary_traffickers,
+Secondary_Traffickers,
 //Delivery_pacing,
 //Frequency_cap,
-DATE(Line_item_start_date) AS Line_item_start_date,
-DATE(Line_item_end_date) AS Line_item_end_date,
+DATE(Line_item_start_date) AS Line_Item_Start_Date,
+DATE(Line_item_end_date) AS Line_Item_End_Date,
 Cost_type,
 FLOAT(Rate_CA) AS Rate_CA,
-INTEGER(Goal_quantity) AS Goal_quantity,
+INTEGER(Goal_quantity) AS Goal_Quantity,
 //INTEGER(Line_item_lifetime_impressions) AS  Line_item_lifetime_impressions,
 //INTEGER(Line_item_lifetime_clicks) AS  Line_item_lifetime_clicks,
 //INTEGER(Line_item_priority) AS Line_item_priority, 
-INTEGER(Contracted_quantity) AS Contracted_quantity,
+INTEGER(Contracted_quantity) AS Contracted_Quantity,
 FLOAT(Discount) AS Discount,
 //FLOAT(Booked_revenue_exclude_CPD_CA) AS Booked_revenue_exclude_CPD_CA, Removed 20160830
 Name_Comments,
 Audience_Segment,
-LineItem_Type, 
-LineItem_Type_product, 
+LineItem_Type AS Line_Item_Type, 
+LineItem_Type_product AS Line_Item_Type_Product, 
 
 //ADDED NEW DFP COLS 20160829
 //Master_Companion_Creative, 
@@ -249,21 +258,21 @@ LineItem_Type_product,
 //INTEGER(Total_Active_View_viewable_impressions) AS Total_Active_View_viewable_impressions,
 PlatformNAME, 
 PlatformID,
-axLineItemTypeNAME,
+axLineItemTypeNAME as axLineItemType_Name,
 //axLineItemTypeID,
-axImpTypeNAME,
+axImpTypeNAME AS axImpType_Name,
 //axImpTypeID,
-axMediaTypeNAME,
+axMediaTypeNAME AS axMediaType_Name,
 //axMediaTypeID,
-CamTypeNAME,
+CamTypeNAME AS CamType_Name,
 //CamTypeID,
-RevTypeNAME,
+RevTypeNAME AS RevType_Name,
 //RevTypeID,
-ManagedNAME,
+ManagedNAME AS Managed_Name,
 //ManagedID,
-AdTypeNAME,
+AdTypeNAME AS AdType_Name,
 //AdTypeID,
-TechFee,
+//TechFee,
 DataSource,
 //LevelOne,
 //ID1,
@@ -271,74 +280,77 @@ DataSource,
 
 //ADDED 20160901
 AssociatedBU,
-PartnershipType,
+PartnershipType AS Partnership_Type,
 //SiteAliasID,
 //END OF 20160901
 
-AccountName,
-PublisherName,
+AccountName AS Account_Name,
+PublisherName AS Publisher_Name,
 //APNXPublisherID,
 Site,
 //Site_ID,
 //Adv,
 DisplayRevShare,
-TCAdvertiserGroup,
+TCAdvertiserGroup AS Advertiser_Group,
 //TCBusinessUnit,
 //TCPublisher,
 //TCSite,
 //PARTNERGroup,
-TCCampSrc,
-ImpressionSource,
+TCCampSrc AS Campaign_Source,
+ImpressionSource AS Impression_Source,
 //Passback,
-ContainerSource,
+ContainerSource AS Container_Source,
 
 //Metrics
-INTEGER(Ad_server_impressions) AS Ad_server_impressions,
-INTEGER(Ad_server_clicks) AS Ad_server_clicks,
-INTEGER(AdSense_impressions) AS AdSense_impressions,
-INTEGER(AdSense_clicks) AS AdSense_clicks,
-INTEGER(Ad_Exchange_impressions) AS Ad_Exchange_impressions,
-INTEGER(Ad_Exchange_clicks) AS Ad_Exchange_clicks,
+INTEGER(Ad_server_impressions) AS Ad_Server_Impressions,
+INTEGER(Ad_server_clicks) AS Ad_Server_Clicks,
+INTEGER(AdSense_impressions) AS AdSense_Impressions,
+INTEGER(AdSense_clicks) AS AdSense_Clicks,
+INTEGER(Ad_Exchange_impressions) AS Ad_Exchange_Impressions,
+INTEGER(Ad_Exchange_clicks) AS Ad_Exchange_Clicks,
 //FLOAT(Ad_server_CPM_and_CPC_revenue_CA) AS Ad_server_CPM_and_CPC_revenue_CA,
 //FLOAT(Ad_server_CPD_revenue_CA) AS Ad_server_CPD_revenue_CA,
 //FLOAT(AdSense_revenue_CA) AS AdSense_revenue_CA,
 //FLOAT(Ad_Exchange_revenue_CA) AS Ad_Exchange_revenue_CA,
 //FLOAT(Total_CPM_and_CPC_revenue_CA) AS Total_CPM_and_CPC_revenue_CA,
-INTEGER(Total_impressions) AS Total_impressions,
-INTEGER(Total_clicks) AS Total_clicks,
-IMPS_Final,
-CLICKS_Final,
-REVS_CPMCPC_Final,
-REVS_CPD_Final
+INTEGER(Total_impressions) AS Total_Impressions,
+INTEGER(Total_clicks) AS Total_Clicks,
+IMPS_Final AS Imps_Final,
+CLICKS_Final as Clicks_Final,
+REVS_CPMCPC_Final AS Revs_CPMCPC_Final,
+REVS_CPD_Final AS Revs_CPD_Final
 
     FROM ManagedServices_DFP.
-    DFP_GENERAL_LevelALL_20160901
+    DFP_GENERAL_LevelALL_20160601
     //IF TESTING, USE:
     --DFP_GENERAL_LevelALL_TEST_20160801
-    ),
+    //WHERE PlatformNAME IS NULL
+    //LIMIT 1000
+ 
+ ),
 
     (
     SELECT
       *
     FROM (
       SELECT
-DATE(TransactionDate) AS TransactionDate,
-Ad_unit_1,
+DATE(TransactionDate) AS Transaction_Date,
+Ad_unit_1 AS Ad_Unit_1,
 //Ad_unit_2,
 //Ad_unit_3,
 //Line_item_type,
 
 //ADDED 20160831 FOR 'sizeless' PURPOSES
-//placement_name, 
+placement_name AS Placement_Name,
 //STRING(placement_id) AS placement_id,
 //AliasName,
-//SiteID,
+SiteID,
 //Creative_size,
-Creative_size_FINAL as Creative_size_Final, //ADDED FOR 'sizeless' in DFP
+Creative_size_FINAL as Creative_Size_Final, //ADDED FOR 'sizeless' in DFP
 //END OF 20160831 FOR 'sizeless' PURPOSES
 
 Advertiser,
-OrderName,
+OrderName AS Order_Name,
 Salesperson,
 Line_item,
 //Product_template,
@@ -350,29 +362,29 @@ Line_item,
 //INTEGER(Salesperson_ID) AS Salesperson_ID,
 //INTEGER(Line_item_ID) AS Line_item_ID,
 //INTEGER(Product_template_ID) AS Product_template_ID,
-DATE(Order_start_date) AS Order_start_date,
-DATE(Order_end_date) AS Order_end_date,
+DATE(Order_start_date) AS Order_Start_Date,
+DATE(Order_end_date) AS Order_End_Date,
 //Order_PO_number,
 Agency,
 Trafficker,
-Secondary_traffickers,
+Secondary_traffickers AS Secondary_Traffickers,
 //Delivery_pacing,
 //Frequency_cap,
-DATE(Line_item_start_date) AS Line_item_start_date,
-DATE(Line_item_end_date) AS Line_item_end_date,
+DATE(Line_item_start_date) AS Line_Item_Start_Date,
+DATE(Line_item_end_date) AS Line_item_End_Date,
 Cost_type,
 FLOAT(Rate_CA) AS Rate_CA,
-INTEGER(Goal_quantity) AS Goal_quantity,
+INTEGER(Goal_quantity) AS Goal_Quantity,
 //INTEGER(Line_item_lifetime_impressions) AS  Line_item_lifetime_impressions,
 //INTEGER(Line_item_lifetime_clicks) AS  Line_item_lifetime_clicks,
 //INTEGER(Line_item_priority) AS Line_item_priority, 
-INTEGER(Contracted_quantity) AS Contracted_quantity,
+INTEGER(Contracted_quantity) AS Contracted_Quantity,
 FLOAT(Discount) AS Discount,
 //FLOAT(Booked_revenue_exclude_CPD_CA) AS Booked_revenue_exclude_CPD_CA, Removed 20160830
 Name_Comments,
 Audience_Segment,
-LineItem_Type, 
-LineItem_Type_product, 
+LineItem_Type AS Line_Item_Type, 
+LineItem_Type_product AS Line_Item_Type_Product, 
 
 //ADDED NEW DFP COLS 20160829
 //STRING('') AS Master_Companion_Creative, 
@@ -385,21 +397,21 @@ LineItem_Type_product,
 //INTEGER(Total_Active_View_viewable_impressions) AS Total_Active_View_viewable_impressions,
 PlatformNAME, 
 PlatformID,
-axLineItemTypeNAME,
+axLineItemTypeNAME as axLineItemType_Name,
 //axLineItemTypeID,
-axImpTypeNAME,
+axImpTypeNAME as axImpType_Name,
 //axImpTypeID,
-axMediaTypeNAME,
+axMediaTypeNAME AS axMediaType_Name,
 //axMediaTypeID,
-CamTypeNAME,
+CamTypeNAME AS CamType_Name,
 //CamTypeID,
-RevTypeNAME,
+RevTypeNAME AS RevType_Name,
 //RevTypeID,
-ManagedNAME,
+ManagedNAME AS Managed_Name,
 //ManagedID,
-AdTypeNAME,
+AdTypeNAME AS AdType_Name,
 //AdTypeID,
-TechFee,
+//TechFee,
 DataSource,
 //LevelOne,
 //ID1,
@@ -407,56 +419,57 @@ DataSource,
 
 //ADDED 20160901
 AssociatedBU,
-PartnershipType,
+PartnershipType AS Partnership_Type,
 //SiteAliasID,
 //END OF 20160901
 
-AccountName,
-PublisherName,
+AccountName AS Account_Name,
+PublisherName AS Publisher_Name,
 //APNXPublisherID,
 Site,
 //Site_ID,
 //Site_ID_calc,
 //Adv,
 DisplayRevShare,
-TCAdvertiserGroup,
+TCAdvertiserGroup AS Advertiser_Group,
 //TCBusinessUnit,
 //TCPublisher,
 //TCSite,
 //PARTNERGroup,
-TCCampSrc,
-ImpressionSource,
+TCCampSrc AS Campaign_Source,
+ImpressionSource AS Impression_Source,
 //Passback,
-ContainerSource,
+ContainerSource AS Container_Source,
 
 //Metrics
-INTEGER(Ad_server_impressions) AS Ad_server_impressions,
-INTEGER(Ad_server_clicks) AS Ad_server_clicks,
-INTEGER(AdSense_impressions) AS AdSense_impressions,
-INTEGER(AdSense_clicks) AS AdSense_clicks,
-INTEGER(Ad_Exchange_impressions) AS Ad_Exchange_impressions,
-INTEGER(Ad_Exchange_clicks) AS Ad_Exchange_clicks,
+INTEGER(Ad_server_impressions) AS Ad_Server_Impressions,
+INTEGER(Ad_server_clicks) AS Ad_Server_Clicks,
+INTEGER(AdSense_impressions) AS AdSense_Impressions,
+INTEGER(AdSense_clicks) AS AdSense_Clicks,
+INTEGER(Ad_Exchange_impressions) AS Ad_Exchange_Impressions,
+INTEGER(Ad_Exchange_clicks) AS Ad_Exchange_Clicks,
 //FLOAT(Ad_server_CPM_and_CPC_revenue_CA) AS Ad_server_CPM_and_CPC_revenue_CA,
 //FLOAT(Ad_server_CPD_revenue_CA) AS Ad_server_CPD_revenue_CA,
 //FLOAT(AdSense_revenue_CA) AS AdSense_revenue_CA,
 //FLOAT(Ad_Exchange_revenue_CA) AS Ad_Exchange_revenue_CA,
 //FLOAT(Total_CPM_and_CPC_revenue_CA) AS Total_CPM_and_CPC_revenue_CA,
-INTEGER(Total_impressions) AS Total_impressions,
-INTEGER(Total_clicks) AS Total_clicks,
-IMPS_Final,
-CLICKS_Final,
-REVS_CPMCPC_Final,
-REVS_CPD_Final
+INTEGER(Total_impressions) AS Total_Impressions,
+INTEGER(Total_clicks) AS Total_Clicks,
+IMPS_Final AS Imps_Final,
+CLICKS_Final AS Clicks_Final,
+REVS_CPMCPC_Final AS Revs_CPMCPC_Final,
+REVS_CPD_Final AS Revs_CPD_Final
 
       FROM ManagedServices_APNX.
-      APPNEXUS_NETWORK_Monthly_20160901
+      APPNEXUS_NETWORK_Monthly_20160601
        //IF TESTING, USE:
       --APPNEXUS_NETWORK_TEST_20160831
+      //WHERE PlatformNAME IS NULL
+      //LIMIT 100
       ))
 
 //--------------------------------
 ) AS A
 JOIN ramp_reference.FXRates AS B
-ON A.TransactionDate = B.FXDate
-//LIMIT 10
+ON A.Transaction_Date = B.FXDate
 //SAVE OUTPUT TO: ManagedServicesProcessed.APNXDFP_20160x01
