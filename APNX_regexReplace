@@ -1,5 +1,4 @@
-//APNX_regexReplace_v11
-//20160831
+//APNX_regexReplace_v12
 //placement_name ADDED 20160831 FOR 'sizeless' PURPOSES
 //Use siteMapping without version number from now on 
 
@@ -107,6 +106,7 @@ SiteAliasID,
 //Added 20160724
 //OLD AccountName AS Publisher,
 AccountName,
+AccountID,
 PublisherName,
 PublisherID,
 //END OF 20160724
@@ -444,7 +444,7 @@ INTEGER(clicks) AS CLICKS_Final,
 FLOAT(revenue) AS REVS_CPMCPC_Final,
 FLOAT(0) AS REVS_CPD_Final
 
-FROM ManagedServices_APNX.APPNEXUS_Network_20160905
+FROM ManagedServices_APNX.APPNEXUS_Network_20160906
 //Save Output to: ManagedServices_APNX.APPNEXUS_NETWORK_JOIN_20160xxx
 //IF TESTING, SAVE IN: ManagedServices_APNX.APPNEXUS_NETWORK_TEST_20160xxx 
 
