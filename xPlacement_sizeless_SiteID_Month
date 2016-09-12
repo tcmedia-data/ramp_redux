@@ -1,0 +1,180 @@
+SELECT Mth__filter,Site,Creative_size_Final
+,Imps_Final
+,CASE WHEN Imps_Final_Sizeless < 0 THEN 0 
+ELSE Imps_Final_Sizeless END AS Imps_Final_Sizeless
+FROM (
+
+SELECT Mth__filter,Site,Creative_size_Final
+,SUM(Imps_Final) AS Imps_Final
+,SUM(Imps_RunningTotal) AS Imps_RunningTotal
+,SUM(Imps_Final_Sizeless) AS Imps_Final_Sizeless
+FROM (
+
+SELECT Mth__filter,Site,PlatformNAME,Creative_size_Final
+//,Total_impressions
+,Imps_Final
+,Imps_RunningTotal
+//,Imps_RunningTotal2
+//,Imps_RunningTotal3
+//,Imps_RunningTotal4
+//,Imps_RunningTotal5
+//,Imps_RunningTotal6
+,CASE WHEN Creative_size_Final ='sizeless' AND PlatformNAME = 'DFP' THEN Imps_RunningTotal6 
+ WHEN Creative_size_Final NOT LIKE '%sizeless%' AND PlatformNAME = 'AppNexus' THEN Imps_RunningTotal3
+ ELSE Imps_RunningTotal3 END AS Imps_Final_Sizeless
+FROM (
+
+SELECT Mth__filter,Site,SiteID,PlatformNAME,Creative_size_Final
+,Total_impressions
+,Imps_Final
+,Imps_RunningTotal
+,Imps_RunningTotal2
+,Imps_RunningTotal3
+,Imps_RunningTotal4
+,Imps_RunningTotal5
+,(MAX(Imps_RunningTotal4)-MAX(Imps_RunningTotal5)) AS Imps_RunningTotal6
+
+FROM (
+
+////E
+SELECT Mth__filter,Site,SiteID,PlatformNAME,Creative_size_Final
+,Total_impressions
+,Imps_Final
+,Imps_RunningTotal
+,SUM(Imps_RunningTotal2) AS Imps_RunningTotal2
+,SUM(Imps_RunningTotal3) AS Imps_RunningTotal3
+,SUM(Imps_RunningTotal2) OVER (PARTITION BY SiteID,Mth__filter) AS Imps_RunningTotal4
+,SUM(Imps_RunningTotal3) OVER (PARTITION BY SiteID,Mth__filter) AS Imps_RunningTotal5
+//,SUM(Revs_CPMCPC_Final) AS Revs_CPMCPC_Final 
+FROM (
+
+SELECT Mth__filter,Site,SiteID,PlatformNAME,Creative_size_Final
+,Total_impressions
+,Imps_Final
+,Imps_RunningTotal
+,CASE WHEN Creative_size_Final ='sizeless' AND PlatformNAME = 'DFP' THEN Imps_Final 
+ELSE 0 END AS Imps_RunningTotal2
+,CASE WHEN Creative_size_Final <>'sizeless' AND PlatformNAME <> 'DFP' THEN Imps_Final 
+ELSE 0 END AS Imps_RunningTotal3
+//,SUM(Revs_CPMCPC_Final) AS Revs_CPMCPC_Final 
+FROM (
+
+SELECT * FROM (
+//AS B
+
+SELECT Mth__filter,Site,SiteID,PlatformNAME,Creative_size_Final
+,SUM(Total_impressions) AS Total_impressions
+,SUM(Imps_Final) AS Imps_Final
+,SUM(Imps_Final) OVER(PARTITION BY SiteID,Mth__filter) AS Imps_RunningTotal
+FROM (
+
+SELECT 
+        CASE
+           WHEN MONTH(TransactionDate) = 1 THEN "01 - Jan"
+           WHEN MONTH(TransactionDate) = 2 THEN "02 - Feb"
+           WHEN MONTH(TransactionDate) = 3 THEN "03 - Mar"
+           WHEN MONTH(TransactionDate) = 4 THEN "04 - Apr"
+           WHEN MONTH(TransactionDate) = 5 THEN "05 - May"
+           WHEN MONTH(TransactionDate) = 6 THEN "06 - Jun"
+           WHEN MONTH(TransactionDate) = 7 THEN "07 - Jul"
+           WHEN MONTH(TransactionDate) = 8 THEN "08 - Aug"
+           WHEN MONTH(TransactionDate) = 9 THEN "09 - Sep"
+           WHEN MONTH(TransactionDate) = 10 THEN "10 - Oct"
+           WHEN MONTH(TransactionDate) = 11 THEN "11 - Nov"
+           ELSE "12 - Dec"
+       END AS Mth__filter,
+PlatformNAME, placement_name, Site, SiteID,  Ad_unit_ID_1, Ad_unit_ID_2, Advertiser, Creative_size, Creative_size_Final
+,Total_impressions
+,Imps_Final
+FROM (
+
+//AS A
+//DFP
+SELECT TransactionDate, PlatformNAME, placement_name, Site, SiteID,  Ad_unit_ID_1, Ad_unit_ID_2, Advertiser, Creative_size, Creative_size_Final
+,Total_impressions
+,Imps_Final
+//,Revs_CPMCPC_Final
+FROM [extreme-pixel-830:ManagedServices_DFP.DFP_GENERAL_LevelALL_20160601] 
+//WHERE SiteID IN ('a1F60000004Czma','a1F60000004Cztm','a1F60000004D4R4') 
+WHERE LOWER(Creative_size_Final) LIKE LOWER('%sizeless%')
+ORDER BY TransactionDate ASC, Site ASC, Advertiser ASC, Creative_size ASC
+    ) AS A,
+    
+    (SELECT * FROM (  
+//AS B
+//APNX
+SELECT TransactionDate, PlatformNAME,placement_name, Site, SiteID, Ad_unit_ID_1, Ad_unit_ID_2, Advertiser,Creative_size, Creative_size as Creative_size_Final
+,Total_impressions
+,Total_impressions AS Imps_Final
+//,REVS_CPMCPC_Final
+FROM ManagedServices_APNX.APPNEXUS_NETWORK_Monthly_20160601
+//WHERE SiteID IN ('a1F60000004Czma','a1F60000004Cztm','a1F60000004D4R4')
+WHERE (LOWER(placement_name) LIKE LOWER('%- hb%')
+OR LOWER(placement_name) LIKE LOWER('%sizeless%'))
+ORDER BY TransactionDate ASC, placement_name ASC, Advertiser ASC, Creative_size ASC
+))) AS B
+
+GROUP BY Mth__filter,Site,SiteID,Creative_size_Final,PlatformNAME
+ORDER BY Creative_size_Final ASC
+
+) AS C
+GROUP BY Mth__filter,Site,SiteID,Creative_size_Final,PlatformNAME
+,Total_impressions
+,Imps_Final
+,Imps_RunningTotal
+ORDER BY Creative_size_Final ASC
+
+) AS D
+GROUP BY Mth__filter,Site,SiteID,Creative_size_Final,PlatformNAME
+,Total_impressions
+,Imps_Final
+,Imps_RunningTotal
+,Imps_RunningTotal2
+,Imps_RunningTotal3
+ORDER BY Creative_size_Final ASC
+
+) AS E
+GROUP BY Mth__filter,Site,SiteID,Creative_size_Final,PlatformNAME
+,Total_impressions
+,Imps_Final
+,Imps_RunningTotal
+ORDER BY SiteID,Creative_size_Final ASC
+
+) AS F
+GROUP BY Mth__filter,Site,SiteID,Creative_size_Final,PlatformNAME
+,Total_impressions
+,Imps_Final
+,Imps_RunningTotal
+,Imps_RunningTotal2
+,Imps_RunningTotal3
+,Imps_RunningTotal4
+,Imps_RunningTotal5
+ORDER BY Creative_size_Final ASC
+
+) AS G
+GROUP BY Mth__filter,Site,SiteID,Creative_size_Final,PlatformNAME
+,Total_impressions
+,Imps_Final
+,Imps_RunningTotal
+//,Imps_RunningTotal2
+//,Imps_RunningTotal3
+//,Imps_RunningTotal4
+//,Imps_RunningTotal5
+,Imps_RunningTotal6
+,Imps_Final_Sizeless
+ORDER BY Mth__filter, SiteID ASC, Creative_size_Final ASC
+
+) AS H
+GROUP BY Mth__filter,Site,Creative_size_Final
+ORDER BY Mth__filter, Site ASC, Creative_size_Final ASC
+
+) AS I
+GROUP BY Mth__filter,Site,Creative_size_Final,Imps_Final,Imps_Final_Sizeless
+ORDER BY Mth__filter, Site ASC, Creative_size_Final ASC
+
+//AS A
+//JOIN ramp_reference.FXRates AS B
+//ON A.TransactionDate = B.FXDate
+//LIMIT 1000
+
+//Save Output to: ManagedServicesProcessed.APNXDFP_HB_SiteID_20160701
