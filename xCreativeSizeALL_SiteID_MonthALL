@@ -1,0 +1,17 @@
+SELECT 
+ Mth__filter, Site, SiteID,Creative_size_Final    
+,SUM(Total_impressions) AS Total_impressions
+,SUM(Imps_Final) AS Imps_Final
+,SUM(Imps_Final_Sizeless) AS Imps_Final_Sizeless
+FROM (
+
+SELECT * FROM 
+(SELECT * FROM ManagedServicesProcessed.APNXDFP_CreativeSize_Part1_20160901) AS A,
+(SELECT * FROM ManagedServicesProcessed.APNXDFP_CreativeSize_Part2_20160901) AS B
+)
+//WHERE siteID = 'a1F600000042JR7'
+GROUP BY Mth__filter, Site, SiteID,Creative_size_Final 
+ORDER BY Mth__filter ASC, SiteID ASC, Creative_size_Final ASC
+//LIMIT 1000
+
+//SAVES AS: extreme-pixel-830:ManagedServicesProcessed.APNXDFP_CreativeSize_20160x01
