@@ -1,3 +1,5 @@
+//BQ QUERY NAME: xAPNXDFP_SiteID_CreativeSize_sizeless
+
 SELECT Mth__filter,Site,SiteID,Platform_NAME,Creative_size_Final
 ,Total_impressions
 ,Imps_Final
