@@ -1,0 +1,54 @@
+SELECT Mth__filter,Site,SiteID,Platform_NAME,Creative_size_Final
+,SUM(Total_impressions) AS Total_impressions
+,SUM(Imps_Final) AS Imps_Final
+,SUM(Imps_Final) AS Imps_Final_Sizeless
+FROM (
+
+SELECT 
+        CASE
+           WHEN MONTH(Transaction_Date) = 1 THEN "01 - Jan"
+           WHEN MONTH(Transaction_Date) = 2 THEN "02 - Feb"
+           WHEN MONTH(Transaction_Date) = 3 THEN "03 - Mar"
+           WHEN MONTH(Transaction_Date) = 4 THEN "04 - Apr"
+           WHEN MONTH(Transaction_Date) = 5 THEN "05 - May"
+           WHEN MONTH(Transaction_Date) = 6 THEN "06 - Jun"
+           WHEN MONTH(Transaction_Date) = 7 THEN "07 - Jul"
+           WHEN MONTH(Transaction_Date) = 8 THEN "08 - Aug"
+           WHEN MONTH(Transaction_Date) = 9 THEN "09 - Sep"
+           WHEN MONTH(Transaction_Date) = 10 THEN "10 - Oct"
+           WHEN MONTH(Transaction_Date) = 11 THEN "11 - Nov"
+           ELSE "12 - Dec"
+       END AS Mth__filter,
+Platform_Name,Site,SiteID, Impression_Source,Advertiser,Creative_size_Final
+,SUM(Total_impressions) AS Total_impressions
+,SUM(IMPS_Final) AS IMPS_Final 
+//PlatformNAME, placement_name, Site, SiteID,  Ad_unit_ID_1, Ad_unit_ID_2, Advertiser, Creative_size, Creative_size_Final
+//,Total_impressions
+//,Imps_Final
+FROM (
+
+SELECT Transaction_Date,Platform_Name,Impression_Source,Site,SiteID,placement_name,Advertiser,Creative_size_Final
+,SUM(Total_impressions) AS Total_impressions
+,SUM(IMPS_Final) AS IMPS_Final 
+FROM (TABLE_DATE_RANGE( ManagedServicesProcessed.APNXDFP_, TIMESTAMP('2016-06-01'), TIMESTAMP('2016-12-31')))
+WHERE LOWER(Creative_size_Final) <> LOWER('sizeless') 
+AND (LOWER(placement_name) <> LOWER('- hb')
+OR LOWER(placement_name) <> LOWER('sizeless'))
+GROUP BY Transaction_Date,Platform_Name,placement_name,Site,SiteID, Impression_Source,Advertiser,Creative_size_Final   
+
+  ) AS A
+GROUP BY Mth__filter,Transaction_Date,  Platform_Name,Site,SiteID, Impression_Source,Advertiser,Creative_size_Final//,Total_impressions,Imps_Final
+ORDER BY SiteID ASC, Creative_size_Final ASC
+
+) AS B
+//WHERE siteID = 'a1F600000042JOD' //Should not be any sizeless visible
+GROUP BY Mth__filter,Site,SiteID,Creative_size_Final,Platform_NAME
+ORDER BY Creative_size_Final ASC
+
+
+//AS A
+//JOIN ramp_reference.FXRates AS B
+//ON A.TransactionDate = B.FXDate
+//LIMIT 1000
+
+//Save Output to: ManagedServicesProcessed.APNXDFP_HB_SiteID_Part2
