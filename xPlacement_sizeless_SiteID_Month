@@ -161,4 +161,4 @@ ORDER BY Mth__filter, Site ASC, Creative_size_Final ASC
 //ON A.TransactionDate = B.FXDate
 //LIMIT 1000
 
-//Save Output to: ManagedServicesProcessed.APNXDFP_HB_SiteID_Part1_20160701
+//Save Output to: ManagedServicesProcessed.APNXDFP_HB_SiteID_Part1
