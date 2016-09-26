@@ -1,3 +1,4 @@
+##http://stackoverflow.com/questions/17693972/python-header-print-one-time-for-every-time-i-run-the-script-not-each-time
 ##http://lxml.de/parsing.html#parsing-html
 
 import lxml
@@ -16,15 +17,19 @@ FXRates = doc.xpath('//*[@class="table-responsive"]/*[@class="table table-border
 FXList=[x.strip() for x in FXRates]
 print FXList
 
-Headers=["Date", "USD2CAD", "CAD2USD"]
-with open('FXUSD2CAD.csv', 'wb') as MyHeaders:
-    writer = csv.DictWriter(MyHeaders, delimiter=";",fieldnames=Headers)
-    writer.writeheader()
-    MyHeaders.close()
+#--- Open the file   + write on it ---
+f = open('FXUSD2CAD.csv','a')
+prev_data = open('FXUSD2CAD.csv', 'r').read()
 
-with open('FXUSD2CAD.csv', 'a') as MyRates:
-    writer = csv.writer(MyRates, delimiter=";", quoting=csv.QUOTE_ALL)
-    writer.writerow(FXList)
-    MyRates.close()
+header = "Date,USD2CAD,CAD2USD\n"
 
-p = Popen('FXUSD2CAD.csv', shell=True)
+# Add a header only if the file is empty
+if prev_data == '':
+    f.write(','.join(header))
+
+f.write(','.join(FXList))
+f.write('\n')
+f.close()
+# --- And Close the file ---
+
+#p = Popen('FXUSD2CAD.csv', shell=True)
