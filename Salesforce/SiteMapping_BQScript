@@ -1,0 +1,41 @@
+SELECT 
+SiteName,
+ImpressionSource,
+SiteActive,
+SiteAliasName,
+AliasActive,
+Platform,
+DisplayRevenueModel,
+MinimumDisplayCPMCurrency,
+MinimumDisplayCPM,
+DisplayRevShare,
+LevelOne,
+APNXPublisherID2437,
+ID1,
+ID2,
+AssociatedBU_AccountName,
+PartnershipType,
+AccountID,
+AccountName,
+AccountStatus,
+SiteID,
+SitePropertyName,
+SiteAliasID,
+AliasName,
+Passback,
+ContainerSource,
+CASE 
+WHEN LOWER(Platform) = LOWER('DFP') THEN ID2
+WHEN LevelOne=0 THEN ID2 
+WHEN (ID2='0' OR ID2 IS NULL) THEN ID1
+ELSE ID1
+END AS ADUnitID
+FROM ramp_reference.siteMapping_raw
+WHERE length(SiteName) < 10
+
+//WHERE ID1 =  '20644365' 
+//AND ID2 = '23930085'
+//OR ID2 IS NULL
+
+//LIMIT 100
+//SAVE OUTPUT TO: ramp_reference.siteMapping
