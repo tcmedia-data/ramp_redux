@@ -1,6 +1,7 @@
 ##http://stackoverflow.com/questions/17693972/python-header-print-one-time-for-every-time-i-run-the-script-not-each-time
 ##http://lxml.de/parsing.html#parsing-html
 
+
 import lxml
 from lxml import etree,html
 from lxml.etree import XMLParser
@@ -8,7 +9,9 @@ import scraperwiki
 import csv
 from subprocess import Popen
 
+
 URL="http://www.bankofcanada.ca/rates/exchange/usd-can-summary/"
+FXFile="FXRates.csv"
 
 parser = XMLParser(ns_clean=True, recover=True)
 doc = lxml.html.fromstring(scraperwiki.scrape(URL))
@@ -18,18 +21,18 @@ FXList=[x.strip() for x in FXRates]
 print FXList
 
 #--- Open the file   + write on it ---
-f = open('FXUSD2CAD.csv','a')
-prev_data = open('FXUSD2CAD.csv', 'r').read()
+fx = open(FXFile,'a')
+prev_data = open(FXFile, 'r').read()
 
-header = "Date,USD2CAD,CAD2USD\n"
+header = "FXDate,USD2CAD,CAD2USD\n"
 
 # Add a header only if the file is empty
 if prev_data == '':
-    f.write(','.join(header))
+    fx.write(','.join(header))
 
-f.write(','.join(FXList))
-f.write('\n')
-f.close()
+fx.write(','.join(FXList))
+fx.write('\n')
+fx.close()
 # --- And Close the file ---
 
-#p = Popen('FXUSD2CAD.csv', shell=True)
+#p = Popen(FXFile, shell=True)
