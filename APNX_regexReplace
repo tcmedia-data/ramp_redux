@@ -1,4 +1,4 @@
-//APNX_regexReplace_v12
+//APNX_regexReplace_v13
 //placement_name ADDED 20160831 FOR 'sizeless' PURPOSES
 //Use siteMapping without version number from now on 
 
@@ -40,7 +40,12 @@ Master_Companion_CreativeID, //New Col V4 20160829
 Order_start_date,
 Order_end_date,
 Order_PO_number,
+
 Agency,
+////Added 20160928
+Agency_ID,
+////End of Added 20160928
+
 Trafficker,
 Secondary_traffickers,
 Delivery_pacing,
@@ -63,7 +68,11 @@ Name_Comments,
 Audience_Segment,
 LineItem_Type, //New Col V3
 LineItem_Type_product, //New Col V3
-Delivery_indicator,
+
+///Removed 20160928
+//Delivery_indicator,
+///End of Removed 20160928
+
 //Total_impressions,
 //Total_clicks,
 //Total_CPM_and_CPC_revenue_CA,
@@ -124,14 +133,17 @@ if(LOWER(Advertiser) CONTAINS 'remnant', 'Remnant', if(LOWER(Line_item_type) CON
 
 CASE WHEN DisplayRevShare IS NULL THEN '0'
 ELSE DisplayRevShare END AS DisplayRevShare,
-//TCMAPPING HELPER COLUMNS - see JOIN table below
-
 TCAdvertiserGroup,
-TCBusinessUnit,
-TCPublisher,
-TCSite,
-PARTNERGroup, 
 TCCampSrc,
+
+///Removed 20160928
+////TCMAPPING HELPER COLUMNS - see JOIN table below
+//TCBusinessUnit,
+//TCPublisher,
+//TCSite,
+//PARTNERGroup, 
+///End of Removed 20160928
+
 ImpressionSource,
 Passback,
 ContainerSource,
@@ -223,7 +235,12 @@ IF(RIGHT(processDate,5) CONTAINS '/',
       STRING('') AS Order_PO_number,
       TIMESTAMP('') AS Line_item_start_date,
       TIMESTAMP('') AS Line_item_end_date,
+      
       STRING('') AS Agency,
+      ////Added 20160928
+      STRING('') AS Agency_ID,
+      ////End of Added 20160928
+      
       STRING('') AS Trafficker,
       STRING('') AS Secondary_traffickers,
       STRING('') AS Delivery_pacing,
@@ -242,7 +259,11 @@ IF(RIGHT(processDate,5) CONTAINS '/',
       
       STRING('') AS Name_Comments,
       STRING('') AS Audience_Segment,
-      FLOAT(0) AS Delivery_indicator,
+
+      ////Removed 20160928
+      //FLOAT(0) AS Delivery_indicator,
+      ////End of Removed 20160928
+
       STRING('') AS LineItem_Type, //New Col V3     
       STRING('') AS LineItem_Type_product, //New Col V3    
       INTEGER(imps) AS Total_impressions,
@@ -444,7 +465,7 @@ INTEGER(clicks) AS CLICKS_Final,
 FLOAT(revenue) AS REVS_CPMCPC_Final,
 FLOAT(0) AS REVS_CPD_Final
 
-FROM ManagedServices_APNX.APPNEXUS_Network_20160906
+FROM ManagedServices_APNX.APPNEXUS_Network_20160919
 //Save Output to: ManagedServices_APNX.APPNEXUS_NETWORK_JOIN_20160xxx
 //IF TESTING, SAVE IN: ManagedServices_APNX.APPNEXUS_NETWORK_TEST_20160xxx 
 
