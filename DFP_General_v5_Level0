@@ -1,4 +1,5 @@
-//DFP_General_v4_Level0_siteMapping_v12
+//DFP_General_v5_Level0_siteMapping_v18
+//ADDED PYTHON COLS 
 //ADDED MASTER COMPANION COLS
 //Use siteMapping without version number
 
@@ -42,7 +43,12 @@ Master_Companion_CreativeID, //New Col V4 20160829
 Order_start_date,
 Order_end_date,
 Order_PO_number,
+
 Agency,
+////Added 20160928
+Agency_ID,
+////End of Added 20160928
+
 Trafficker,
 Secondary_traffickers,
 Delivery_pacing,
@@ -50,7 +56,7 @@ Frequency_cap,
 Line_item_start_date,
 Line_item_end_date,
 Cost_type,
-Rate_CA,
+(Rate_CA/1000000) AS Rate_CA,
 Goal_quantity,
 Line_item_lifetime_impressions,
 Line_item_lifetime_clicks,
@@ -71,8 +77,11 @@ LineItem_Type_product, //New Col V3
 //Total_clicks,
 //Total_CPM_and_CPC_revenue_CA, 
 //Ad_server_CPD_revenue_CA, 
-//
-Delivery_indicator,
+
+////Removed 20160928
+//(Delivery_indicator*100) AS Delivery_indicator,
+////End of Removed 20160928
+
 Total_Active_View_eligible_impressions,
 Total_Active_View_viewable_impressions,
 
@@ -131,13 +140,17 @@ ELSE ID1 END AS Site_ID_calc,
 if(LOWER(Advertiser) CONTAINS 'remnant', 'Remnant', if(LOWER(Advertiser) CONTAINS 'bidding','Bidding','Other')) AS Adv,
 CASE WHEN DisplayRevShare IS NULL THEN '0'
 ELSE DisplayRevShare END AS DisplayRevShare,
-//TCMAPPING HELPER COLUMNS - see JOIN table below
 TCAdvertiserGroup,
-TCBusinessUnit,
-TCPublisher,
-TCSite,
-PARTNERGroup,
 TCCampSrc,
+
+//Removed 20160928
+//TCMAPPING HELPER COLUMNS - see JOIN table below
+//TCBusinessUnit,
+//TCPublisher,
+//TCSite,
+//PARTNERGroup,
+////End of Removed 20160928
+
 ImpressionSource,
 Passback,
 ContainerSource,
@@ -156,17 +169,17 @@ Ad_Exchange_impressions,
 Ad_Exchange_clicks,
 
 //AD SERVER REVS
-Ad_server_CPM_and_CPC_revenue_CA,
-Ad_server_CPD_revenue_CA,
+(Ad_server_CPM_and_CPC_revenue_CA/1000000) AS Ad_server_CPM_and_CPC_revenue_CA,
+(Ad_server_CPD_revenue_CA/1000000) AS Ad_server_CPD_revenue_CA,
 
 //ADSENSE REVS
-AdSense_revenue_CA,
+(AdSense_revenue_CA/1000000) AS AdSense_revenue_CA,
 
 //ADX REVS
-Ad_Exchange_revenue_CA,
+(Ad_Exchange_revenue_CA/1000000) AS Ad_Exchange_revenue_CA,
 
 //Total Metrics
-Total_CPM_and_CPC_revenue_CA,
+(Total_CPM_and_CPC_revenue_CA/1000000) AS Total_CPM_and_CPC_revenue_CA, 
 Total_impressions,
 Total_clicks,
 
@@ -185,39 +198,21 @@ Total_clicks AS CLICKS_Final,
 //REVS_CPMCPC_Final 
 CASE WHEN LOWER(ImpressionSource) = LOWER('DFP') AND LOWER(Advertiser) LIKE LOWER('%appnexus%remnant%') THEN 0           //AppNexus
 WHEN LOWER(ImpressionSource) = LOWER('DFP') AND LOWER(Advertiser) LIKE LOWER('%appnexus%header%bidding%') THEN 0         //AppNexus
-ELSE Total_CPM_and_CPC_revenue_CA END AS REVS_CPMCPC_Final,
+ELSE (Total_CPM_and_CPC_revenue_CA/1000000) END AS REVS_CPMCPC_Final,
 
 //REVS_CPD_Final
 CASE WHEN LOWER(ImpressionSource) = LOWER('DFP') AND LOWER(Advertiser) LIKE LOWER('%appnexus%remnant%') THEN 0           //AppNexus
 WHEN LOWER(ImpressionSource) = LOWER('DFP') AND LOWER(Advertiser) LIKE LOWER('%appnexus%header%bidding%') THEN 0         //AppNexus
-ELSE Ad_server_CPD_revenue_CA END AS REVS_CPD_Final
+ELSE (Ad_server_CPD_revenue_CA/1000000) END AS REVS_CPD_Final
 
 //END OF FINAL METRICS INSTALLED 20160804
 //-------------------------------------
 
 FROM(
 
-SELECT
-//TransactionDate : validate for Total line visible as 'total' 
-IF(LOWER(TransactionDate) LIKE '%total%','total',
-//TransactionDate
-IF(RIGHT(TransactionDate,3) CONTAINS '/', 
-// DATE FORMAT AS 1/1/16  
-DATE(TIMESTAMP(LPAD(REGEXP_EXTRACT(TransactionDate, '.*/([0-9]{1,2})$'),4,'20')  + '-' + 
-    LPAD(REGEXP_EXTRACT(TransactionDate, '^([0-9]{1,2}).*'),2,'0')  + '-' +
-    LPAD(REGEXP_EXTRACT(TransactionDate, '.*/([0-9]{1,2})/.*'),2,'0'))),
-// DATE FORMAT AS 1/1/2016  
-DATE(TIMESTAMP(DATE(TIMESTAMP(REGEXP_EXTRACT(REPLACE(REPLACE(TransactionDate,'-',''),'Unlimited',''), '.*/([0-9]{4})$')  + '-' + 
-    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(TransactionDate,'-',''),'Unlimited',''), '^([0-9]{1,2}).*'),2,'0')  + '-' +
-    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(TransactionDate,'-',''),'Unlimited',''), '.*/([0-9]{1,2})/.*'),2,'0'))))))) AS TransactionDate,
+SELECT  
 
-//IF(RIGHT(TransactionDate,3) CONTAINS '/', 
-// IF DATE FORMAT IS AS 1/1/16  
-//DATE(TIMESTAMP(LPAD(REGEXP_EXTRACT(TransactionDate, '.*/([0-9]{1,2})$'),4,'20')  + '-' + 
-//    LPAD(REGEXP_EXTRACT(TransactionDate, '^([0-9]{1,2}).*'),2,'0')  + '-' +
-//    LPAD(REGEXP_EXTRACT(TransactionDate, '.*/([0-9]{1,2})/.*'),2,'0'))),TransactionDate)) AS TransactionDate,
-
-//TransactionDate
+DATE(TransactionDate) AS TransactionDate,
 
 Ad_unit_1,
 Ad_unit_2,
@@ -245,58 +240,35 @@ INTEGER(REPLACE(Product_template_ID,'-','0')) AS Product_template_ID, //New Col 
 Master_Companion_CreativeID, //New Col V4 20160829
 
 //Order_start_date
-IF(RIGHT(Order_start_date,3) CONTAINS '/', 
-// DATE FORMAT AS 1/1/16  
-DATE(TIMESTAMP(LPAD(REGEXP_EXTRACT(Order_start_date, '.*/([0-9]{1,2})$'),4,'20')  + '-' + 
-    LPAD(REGEXP_EXTRACT(Order_start_date, '^([0-9]{1,2}).*'),2,'0')  + '-' +
-    LPAD(REGEXP_EXTRACT(Order_start_date, '.*/([0-9]{1,2})/.*'),2,'0'))),
-// DATE FORMAT AS 1/1/2016  
-DATE(TIMESTAMP(DATE(TIMESTAMP(REGEXP_EXTRACT(REPLACE(REPLACE(Order_start_date,'-',''),'Unlimited',''), '.*/([0-9]{4})$')  + '-' + 
-    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Order_start_date,'-',''),'Unlimited',''), '^([0-9]{1,2}).*'),2,'0')  + '-' +
-    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Order_start_date,'-',''),'Unlimited',''), '.*/([0-9]{1,2})/.*'),2,'0')))))) AS Order_start_date,
+DATE(Order_start_date) AS Order_start_date,
 
 //Order_end_date
-IF(RIGHT(Order_end_date ,3) CONTAINS '/', 
-// DATE FORMAT AS 1/1/16  
-DATE(TIMESTAMP(LPAD(REGEXP_EXTRACT(Order_end_date, '.*/([0-9]{1,2})$'),4,'20')  + '-' + 
-    LPAD(REGEXP_EXTRACT(Order_end_date, '^([0-9]{1,2}).*'),2,'0')  + '-' +
-    LPAD(REGEXP_EXTRACT(Order_end_date, '.*/([0-9]{1,2})/.*'),2,'0'))),
-// DATE FORMAT AS 1/1/2016  
-DATE(TIMESTAMP(DATE(TIMESTAMP(REGEXP_EXTRACT(REPLACE(REPLACE(Order_end_date,'-',''),'Unlimited',''), '.*/([0-9]{4})$')  + '-' + 
-    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Order_end_date,'-',''),'Unlimited',''), '^([0-9]{1,2}).*'),2,'0')  + '-' +
-    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Order_end_date,'-',''),'Unlimited',''), '.*/([0-9]{1,2})/.*'),2,'0')))))) AS Order_end_date,
- 
+DATE(Order_end_date) AS Order_end_date,
+
 Order_PO_number,
+
 Agency,
+////Added 20160928
+Agency_ID,
+////End of Added 20160928
+
 Trafficker,
 Secondary_traffickers,
 Delivery_pacing,
 Frequency_cap,
 
 //Line_item_start_date
-IF(RIGHT(Line_item_start_date,3) CONTAINS '/', 
-// DATE FORMAT AS 1/1/16  
-DATE(TIMESTAMP(LPAD(REGEXP_EXTRACT(Line_item_start_date, '.*/([0-9]{1,2})$'),4,'20')  + '-' + 
-    LPAD(REGEXP_EXTRACT(Line_item_start_date, '^([0-9]{1,2}).*'),2,'0')  + '-' +
-    LPAD(REGEXP_EXTRACT(Line_item_start_date, '.*/([0-9]{1,2})/.*'),2,'0'))),
-// DATE FORMAT AS 1/1/2016  
-DATE(TIMESTAMP(DATE(TIMESTAMP(REGEXP_EXTRACT(REPLACE(REPLACE(Line_item_start_date,'-',''),'Unlimited',''), '.*/([0-9]{4})$')  + '-' + 
-    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Line_item_start_date,'-',''),'Unlimited',''), '^([0-9]{1,2}).*'),2,'0')  + '-' +
-    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Line_item_start_date,'-',''),'Unlimited',''), '.*/([0-9]{1,2})/.*'),2,'0')))))) AS Line_item_start_date,
+DATE(Line_item_start_date) AS Line_item_start_date,
 
 //Line_item_end_date
-IF(RIGHT(Line_item_end_date,3) CONTAINS '/', 
-// DATE FORMAT AS 1/1/16  
-DATE(TIMESTAMP(LPAD(REGEXP_EXTRACT(Line_item_end_date, '.*/([0-9]{1,2})$'),4,'20')  + '-' + 
-    LPAD(REGEXP_EXTRACT(Line_item_end_date, '^([0-9]{1,2}).*'),2,'0')  + '-' +
-    LPAD(REGEXP_EXTRACT(Line_item_end_date, '.*/([0-9]{1,2})/.*'),2,'0'))),
-// DATE FORMAT AS 1/1/2016  
-DATE(TIMESTAMP(DATE(TIMESTAMP(REGEXP_EXTRACT(REPLACE(REPLACE(Line_item_end_date,'-',''),'Unlimited',''), '.*/([0-9]{4})$')  + '-' + 
-    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Line_item_end_date,'-',''),'Unlimited',''), '^([0-9]{1,2}).*'),2,'0')  + '-' +
-    LPAD(REGEXP_EXTRACT(REPLACE(REPLACE(Line_item_end_date,'-',''),'Unlimited',''), '.*/([0-9]{1,2})/.*'),2,'0')))))) AS Line_item_end_date,
-    
+DATE(Line_item_end_date) AS Line_item_end_date,
+
 Cost_type,
+
+//DimensionAttribute.LINE_ITEM_COST_PER_UNIT into RATE_CA as MicroAmount (*1000000) added 20160927
 FLOAT(REPLACE(REPLACE(REPLACE(REPLACE(Rate_CA,',',''),'$',''),'CA',''),' ', '')) AS Rate_CA,
+//End of DimensionAttribute.LINE_ITEM_COST_PER_UNIT into RATE_CA as MicroAmount (*1000000) added 20160927
+
 INTEGER(REPLACE(REPLACE(Goal_quantity,'N/A',''),',','')) AS Goal_quantity,
 INTEGER(REPLACE(REPLACE(REPLACE(Line_item_lifetime_impressions,',',''),'-',''),' ', '')) AS  Line_item_lifetime_impressions,
 INTEGER(REPLACE(REPLACE(REPLACE(Line_item_lifetime_clicks,',',''),'-',''),' ', '')) AS  Line_item_lifetime_clicks,
@@ -307,17 +279,21 @@ FLOAT(REPLACE(REPLACE(REPLACE(Discount,'-','0.0'),'%',''),' ', '')) AS Discount,
 Master_Companion, //New Col V4 20160829
 //FLOAT(REPLACE(REPLACE(REPLACE(REPLACE(Booked_revenue_exclude_CPD_CA,',',''),'$',''),'CA',''),' ', '')) AS Booked_revenue_exclude_CPD_CA, //Removed as MAX REPORT DIM REACHED 20160829
 
-Name_Comments,
-Audience_Segment,
-LineItem_Type, //New Col V3
-LineItem_Type_product, //New Col V3
+STRING('-') AS Name_Comments,
+STRING('-') AS Audience_Segment,
+STRING('-') AS LineItem_Type, //New Col V3
+STRING('-') AS LineItem_Type_product, //New Col V3
 
 INTEGER(Total_impressions) AS Total_impressions,
 INTEGER(Total_clicks) AS Total_clicks,
 FLOAT(Total_CPM_and_CPC_revenue_CA) AS Total_CPM_and_CPC_revenue_CA,
-FLOAT(REPLACE(REPLACE(REPLACE(REPLACE(Delivery_indicator,'N/A','0.0'),'-','0.0'),'%',''),' ','')) AS Delivery_indicator,
-INTEGER(Total_Active_View_eligible_impressions) AS Total_Active_View_eligible_impressions,
-INTEGER(Total_Active_View_viewable_impressions) AS Total_Active_View_viewable_impressions,
+
+////Removed 20160928
+//FLOAT(REPLACE(REPLACE(REPLACE(REPLACE(Delivery_indicator,'N/A','0.0'),'-','0.0'),'%',''),' ','')) AS Delivery_indicator,
+////End of Removed 20160928
+
+INTEGER(0) AS Total_Active_View_eligible_impressions,
+INTEGER(0) AS Total_Active_View_viewable_impressions,
 
 //Added 20160804
 INTEGER(Ad_server_impressions) AS Ad_server_impressions,
@@ -419,14 +395,11 @@ ELSE 'Direct'
 END AS TCCampSrc
 
 //LevelOne=0 
-FROM ManagedServices_DFP.DFP_General_20160901
-//SAVE IN: ManagedServices_DFP.DFP_GENERAL_Level0_20160xxx
-//IF TESTING, SAVE IN: ManagedServices_DFP.DFP_GENERAL_Level0_TEST_20160xxx 
-
+FROM ManagedServices_DFP.DFP_General_20160922
 WHERE LOWER(TransactionDate) NOT LIKE '%total%'
 //FOR VALIDATION ONLY 
 //AND Ad_unit_1 = 'Acquizition.biz - EN'
-ORDER BY TransactionDate ASC) AS A
+ORDER BY TransactionDate ASC ) AS A
 JOIN ramp_reference.siteMapping as B //20160831 Use siteMapping without version number
 ON A.Ad_unit_ID_2 = B.AdUNitID
 
@@ -437,8 +410,8 @@ LevelOne=0 AND (Creative_size NOT IN ('0x0')) //VERIFY THIS RULE WITH FRED LATER
 //VALIDATION 
 //AND Total_impressions IS NULL
 ORDER BY Ad_unit_1 ASC, Ad_unit_2 ASC
-IGNORE CASE
 
 //LIMIT 100
 //ADDED MASTER COMPANION COLS V4
-//Use siteMapping without version number
+//Use siteMapping without version numbers
+//SAVE OUTPUT TO: ManagedServices_DFP.DFP_GENERAL_Level0_20160xxx
