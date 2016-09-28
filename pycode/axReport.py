@@ -108,9 +108,9 @@ def buildReport(startDate, endDate, outfile):
                + SEMI + row['"revenue"']
 
 
-    output.write(line.replace('"', ''))
-    output.write('\n')
-    output.flush()
+        output.write(line.replace('"', ''))
+        output.write('\n')
+        output.flush()
 
 
 def main(argv):
@@ -133,9 +133,9 @@ def main(argv):
         elif opt in ("-e", "--edate"):
             enddate = arg
 
-    # outfile = '/Users/tweediej/upload/APPNEXUS_NETWORK_20160927.csv'
-    # startdate = '2016-09-27'
-    # enddate = '2016-09-28'
+    #outfile = '/Users/tweediej/upload/APPNEXUS_NETWORK_20160921.csv'
+    #startdate = '2016-09-21'
+    #enddate = '2016-09-22'
 
     buildReport(startdate, enddate, outfile)
 
