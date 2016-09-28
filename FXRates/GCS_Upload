@@ -1,0 +1,2 @@
+##File extracted with FXRtaes_BOFScrapper
+bq load --replace --field_delimiter=, --skip_leading_rows=1 extreme-pixel-830:ramp_reference.FXRates gs://lookup_data/FXRates.csv FXDate:STRING,USD2CAD:STRING,CAD2USD:STRING
