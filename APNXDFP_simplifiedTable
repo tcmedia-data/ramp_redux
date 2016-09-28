@@ -128,8 +128,8 @@ Clicks_Final,
 //End of Added 20160801
 //-----------------------------
 //FXRates Start
-CAD2USD,
-USD2CAD,
+FLOAT(CAD2USD) AS CAD2USD,
+FLOAT(USD2CAD) AS USD2CAD,
 
 CASE WHEN PlatformID IN (1,3) THEN 'CAD'
 ELSE 'USD' 
@@ -598,5 +598,5 @@ END AS Revs_CPD_Final_Adjusted,
 JOIN ramp_reference.FXRates AS B
 ON A.Transaction_Date = B.FXDate
 //SAVE OUTPUT TO: ManagedServicesProcessed.APNXDFP_20160x01
-////FOR TEST Purposes:
+////FRO TEST Purposes:
 //SAVE OUTPUT TO: output.APNXDFP_Adjusted_20160901
