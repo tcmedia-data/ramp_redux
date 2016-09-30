@@ -37,3 +37,8 @@ set3 = set(APNXData), set(BQ_Control)
 print 'APNX Column(s) not from APNX Control File=', ','.join([i for i in APNXData if i not in APNX_Control])
 print 'BQ Column(s) missing in APNX raw report=', ','.join([i for i in APNX_Control if i not in BQ_Control and i not in APNXData])
 
+print
+if len([i for i in APNXData if i not in APNX_Control]) <> 0:
+    print 'STOP processing:',APNX_File
+else:    
+    print 'GO processing:',APNX_File
