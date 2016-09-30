@@ -1,7 +1,14 @@
 import csv
+import datetime
+
+# Get the current date and time
+now = datetime.datetime.now()
+now_str = now.strftime("%Y%m%d")
 
 ## File to validate :: Change name 
-SLFR_siteMapping_File = "report1475253573783.csv"
+SLFR_siteMapping_File = "SiteMapping_20160930.csv"
+# OR USE 
+# SLFR_siteMapping_File = "SiteMapping_"+str(datetime.datetime.now().strftime('%Y%m%d'))+".csv"
 
 ## Companion Files :: Do not change except when new header row is modified
 ## Script requires DFP_Headers.csv and BQ_Headers.csv to be in same folder
