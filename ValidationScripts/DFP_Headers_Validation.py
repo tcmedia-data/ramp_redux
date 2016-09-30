@@ -37,3 +37,8 @@ set3 = set(DFPData), set(BQ_Control)
 print 'DFP Column(s) not from DFP Control File=', ','.join([i for i in DFPData if i not in DFP_Control])
 print 'BQ Column(s) missing in DFP raw report=', ','.join([i for i in DFP_Control if i not in BQ_Control and i not in DFPData])
 
+print
+if len([i for i in DFPData if i not in DFP_Control]) <> 0:
+    print 'STOP processing:',DFP_File
+else:    
+    print 'GO processing:',DFP_File
