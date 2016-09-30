@@ -1,11 +1,10 @@
-## Script requires DFP_Headers.csv and BQ_Headers.csv to be in same folder
-
 import csv
 
 ## File to validate :: Change name 
 DFP_File = "DFP_General_20160927.csv" 
 
 ## Companion Files :: Do not change except when new header row is modified
+## Script requires DFP_Headers.csv and BQ_Headers.csv to be in same folder
 DFP_Headers = "DFP_Headers.csv"
 BQ_Headers = "BQ_DFP_Headers.csv"
 
