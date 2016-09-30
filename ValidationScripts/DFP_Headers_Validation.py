@@ -2,10 +2,10 @@
 
 import csv
 
-## Change this one for validation
+## File to validate :: Change name 
 DFP_File = "DFP_General_20160927.csv" 
 
-## Do not change except when new header row is modified 
+## Companion Files :: Do not change except when new header row is modified
 DFP_Headers = "DFP_Headers.csv"
 BQ_Headers = "BQ_DFP_Headers.csv"
 
