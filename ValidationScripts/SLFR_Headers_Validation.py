@@ -6,7 +6,7 @@ now = datetime.datetime.now()
 now_str = now.strftime("%Y%m%d")
 
 ## File to validate :: Change name 
-SLFR_siteMapping_File = "SiteMapping_20160930.csv"
+SLFR_siteMapping_File = "siteMapping.csv"
 # OR USE 
 # SLFR_siteMapping_File = "SiteMapping_"+str(datetime.datetime.now().strftime('%Y%m%d'))+".csv"
 
