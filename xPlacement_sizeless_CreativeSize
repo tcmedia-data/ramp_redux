@@ -94,7 +94,7 @@ SELECT TransactionDate, PlatformNAME, placement_name, Creative_size_Final
 ,Total_impressions
 ,Imps_Final
 //,Revs_CPMCPC_Final
-FROM [extreme-pixel-830:ManagedServices_DFP.DFP_GENERAL_LevelALL_20160901] 
+FROM ManagedServices_DFP.DFP_GENERAL_LevelALL_20160901
 WHERE LOWER(Creative_size_Final) LIKE LOWER('%sizeless%')
 ORDER BY TransactionDate ASC, Creative_size ASC
     ) AS A,
