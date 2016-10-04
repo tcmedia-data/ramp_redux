@@ -32,7 +32,7 @@ Order_start_date,
 Order_end_date,
 Order_PO_number,
 Agency,
-STRING('') AS Agency_ID,
+Agency_ID,
 Trafficker,
 Secondary_traffickers,
 Delivery_pacing,
@@ -52,7 +52,6 @@ Name_Comments,
 Audience_Segment,
 LineItem_Type,
 LineItem_Type_product,
-Delivery_indicator,
 Total_Active_View_eligible_impressions,
 Total_Active_View_viewable_impressions,
 PlatformNAME,
@@ -73,9 +72,9 @@ AdTypeNAME,
 AdTypeID,
 TechFee,
 DataSource,
-LevelOne,
-ID1,
-ID2,
+STRING(LevelOne) AS LevelOne,
+STRING(ID1) AS ID1,
+STRING(ID2) AS ID2,
 AssociatedBU,
 PartnershipType,
 SiteAliasID,
@@ -111,15 +110,12 @@ CLICKS_Final,
 REVS_CPMCPC_Final,
 REVS_CPD_Final
 FROM 
-(TABLE_DATE_RANGE( ManagedServices_APNX.APPNEXUS_NETWORK_JOIN_, TIMESTAMP('2016-06-01'), TIMESTAMP('2016-06-30')))
+--(TABLE_DATE_RANGE( ManagedServices_APNX.APPNEXUS_NETWORK_JOIN_, TIMESTAMP('2016-06-01'), TIMESTAMP('2016-06-30')))
 --(TABLE_DATE_RANGE( ManagedServices_APNX.APPNEXUS_NETWORK_JOIN_, TIMESTAMP('2016-07-01'), TIMESTAMP('2016-07-31')))
 --(TABLE_DATE_RANGE( ManagedServices_APNX.APPNEXUS_NETWORK_JOIN_, TIMESTAMP('2016-08-01'), TIMESTAMP('2016-08-31')))
 --(TABLE_DATE_RANGE( ManagedServices_APNX.APPNEXUS_NETWORK_JOIN_, TIMESTAMP('2016-09-01'), TIMESTAMP('2016-09-30')))
-
-//IF TESTING, USE: 
---(TABLE_DATE_RANGE( ManagedServices_APNX.APPNEXUS_NETWORK_TEST_, TIMESTAMP('2016-08-31'), TIMESTAMP('2016-08-31'))) 
+(TABLE_DATE_RANGE( ManagedServices_APNX.APPNEXUS_NETWORK_JOIN_, TIMESTAMP('2016-10-01'), TIMESTAMP('2016-10-31')))
 
 WHERE TransactionDate IS NOT NULL
 
-//Save Output to: ManagedServices_APNX.APPNEXUS_NETWORK_Monthly_20160x01
-//IF TESTING, SAVE IN: ManagedServices_APNX.APPNEXUS_NETWORK_TEST_Monthly_20160x01
+//Save Output to: ManagedServices_APNX.APPNEXUS_NETWORK_Monthly_2016xx01
