@@ -412,7 +412,7 @@ END AS Revs_CPD_Final_Adjusted,
 //End of ADJUSTEMENT OF Revs_CPD_Final 20160922
 
       //FROM ManagedServices_APNX.APPNEXUS_NETWORK_Monthly_20160901
-      FROM (TABLE_DATE_RANGE( ManagedServices_DFP.DFP_GENERAL_LevelALL_, TIMESTAMP('2016-09-01'), TIMESTAMP('2016-09-30'))) 
+      FROM (TABLE_DATE_RANGE( ManagedServices_DFP.DFP_GENERAL_LevelALL_, TIMESTAMP('2016-10-01'), TIMESTAMP('2016-10-31'))) 
       //WHERE OrderName IN ('O000268150','O000273385','O000274797','O000284471')
       //ManagedServices_DFP.DFP_GENERAL_LevelALL_20160801
        //IF TESTING, USE:
@@ -582,7 +582,7 @@ END AS Revs_CPD_Final_Adjusted,
 
 
       //FROM ManagedServices_APNX.APPNEXUS_NETWORK_Monthly_20160801
-      FROM (TABLE_DATE_RANGE( ManagedServices_APNX.APPNEXUS_NETWORK_Monthly_, TIMESTAMP('2016-09-01'), TIMESTAMP('2016-09-30'))) 
+      FROM (TABLE_DATE_RANGE( ManagedServices_APNX.APPNEXUS_NETWORK_Monthly_, TIMESTAMP('2016-10-01'), TIMESTAMP('2016-10-31'))) 
 
       //CASE OF RATE_CA changed
       //WHERE OrderName NOT IN ('O000268150','O000273385','O000274797','O000284471')
@@ -597,6 +597,6 @@ END AS Revs_CPD_Final_Adjusted,
 ) AS A
 JOIN ramp_reference.FXRates AS B
 ON A.Transaction_Date = B.FXDate
-//SAVE OUTPUT TO: ManagedServicesProcessed.APNXDFP_20160x01
+//SAVE OUTPUT TO: ManagedServicesProcessed.APNXDFP_2016xx01
 ////FRO TEST Purposes:
 //SAVE OUTPUT TO: output.APNXDFP_Adjusted_20160901
