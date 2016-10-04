@@ -5,10 +5,10 @@ import datetime
 now = datetime.datetime.now()
 now_str = now.strftime("%Y%m%d")
 
-## File to validate :: Change name 
-SLFR_siteMapping_File = "siteMapping.csv"
+## File to validate::
+SLFR_siteMapping_File = "siteMapping"+str(datetime.datetime.now().strftime('%Y%m%d'))+".csv"
 # OR USE 
-# SLFR_siteMapping_File = "SiteMapping_"+str(datetime.datetime.now().strftime('%Y%m%d'))+".csv"
+# SLFR_siteMapping_File = "siteMapping.csv"
 
 ## Companion Files :: Do not change except when new header row is modified
 ## Script requires DFP_Headers.csv and BQ_Headers.csv to be in same folder
