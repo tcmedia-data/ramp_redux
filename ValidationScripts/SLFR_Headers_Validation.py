@@ -5,11 +5,10 @@ import datetime
 now = datetime.datetime.now()
 now_str = now.strftime("%Y%m%d")
 
-## See Companion Script: ramp_redux/Salesforce/salesforcereport.py
-## File to validate must be in same folder where is this script.
-SLFR_siteMapping_File = "siteMapping_"+str(datetime.datetime.now().strftime('%Y%m%d'))+".csv"
+## File to validate :: Change name 
+SLFR_siteMapping_File = "SiteMapping_20160930.csv"
 # OR USE 
-# SLFR_siteMapping_File = "siteMapping.csv"
+# SLFR_siteMapping_File = "SiteMapping_"+str(datetime.datetime.now().strftime('%Y%m%d'))+".csv"
 
 ## Companion Files :: Do not change except when new header row is modified
 ## Script requires DFP_Headers.csv and BQ_Headers.csv to be in same folder
@@ -42,11 +41,14 @@ set3 = set(SLFRData), set(BQ_Control)
 [i for i in SLFRData if i not in set2]
 [i for i in SLFR_Control if i not in set1]
 [i for i in SLFRData if i not in set3]
-print 'SLFR Column(s) not from SLFR Control File=', ','.join([i for i in SLFRData if i not in SLFR_Control])
-print 'BQ Column(s) missing in SLFR raw report=', ','.join([i for i in SLFR_Control if i not in BQ_Control and i not in SLFRData])
 
 print
 if len([i for i in SLFRData if i not in SLFR_Control]) <> 0:
     print 'STOP processing:',SLFR_siteMapping_File
+    print
+    print 'SLFR Column(s) not from SLFR Control File=', ','.join([i for i in SLFRData if i not in SLFR_Control])
+    print 'BQ Column(s) missing in SLFR raw report=', ','.join([i for i in SLFR_Control if i not in BQ_Control and i not in SLFRData])
+
 else:    
     print 'GO processing:',SLFR_siteMapping_File
+

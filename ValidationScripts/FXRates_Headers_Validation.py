@@ -37,6 +37,7 @@ set3 = set(FXData), set(BQ_Control)
 print
 if len([i for i in FXData if i not in FXRates_Control]) <> 0:
     print 'STOP processing:',FXRates_File
+    print
     print 'FXRates Column(s) not from FXRates Control File=', ','.join([i for i in FXData if i not in FXRates_Control])
     print 'FXRAtes Column(s) missing in FXRates raw report=', ','.join([i for i in FXRates_Control if i not in BQ_Control and i not in FXData])
 

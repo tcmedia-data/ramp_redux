@@ -1,7 +1,7 @@
 import csv
 
 ## File to validate :: Change name 
-DFP_File = "DFP_General_20160927.csv" 
+DFP_File = "DFP_General_20160927.csv"
 
 ## Companion Files :: Do not change except when new header row is modified
 ## Script requires DFP_Headers.csv and BQ_Headers.csv to be in same folder
@@ -34,11 +34,12 @@ set3 = set(DFPData), set(BQ_Control)
 [i for i in DFP_Control if i not in set1]
 [i for i in DFPData if i not in set3]
 
-print 'DFP Column(s) not from DFP Control File=', ','.join([i for i in DFPData if i not in DFP_Control])
-print 'BQ Column(s) missing in DFP raw report=', ','.join([i for i in DFP_Control if i not in BQ_Control and i not in DFPData])
-
 print
 if len([i for i in DFPData if i not in DFP_Control]) <> 0:
     print 'STOP processing:',DFP_File
+    print
+    print 'DFP Column(s) not from DFP Control File=', ','.join([i for i in DFPData if i not in DFP_Control])
+    print 'BQ Column(s) missing in DFP raw report=', ','.join([i for i in DFP_Control if i not in BQ_Control and i not in DFPData])
+
 else:    
     print 'GO processing:',DFP_File
