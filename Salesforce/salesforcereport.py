@@ -13,7 +13,7 @@ sf = Salesforce(username='sgagnier@tc.tc', password='R1d1x2016', security_token=
 cookies = dict(sid=sf.session_id)
 r = requests.get("https://na4.salesforce.com/00O60000004kXAD?csv=1", cookies=cookies)
 
-siteMapping_File= "\Users\gilbertf\Downloads\SiteMapping_"+str(datetime.datetime.now().strftime('%Y%m%d'))+".csv"
+siteMapping_File= "\Users\gilbertf\Downloads\siteMapping_"+str(datetime.datetime.now().strftime('%Y%m%d'))+".csv"
 
 with open(str(siteMapping_File), 'wb') as f:
      f.write(r.content)
