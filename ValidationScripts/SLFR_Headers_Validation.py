@@ -5,7 +5,8 @@ import datetime
 now = datetime.datetime.now()
 now_str = now.strftime("%Y%m%d")
 
-## File to validate::
+## See Companion Script: ramp_redux/Salesforce/salesforcereport.py
+## File to validate must be in same folder where is this script.
 SLFR_siteMapping_File = "siteMapping_"+str(datetime.datetime.now().strftime('%Y%m%d'))+".csv"
 # OR USE 
 # SLFR_siteMapping_File = "siteMapping.csv"
