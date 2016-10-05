@@ -60,12 +60,12 @@ Line_item_start_date,
 Line_item_end_date,
 Cost_type,
 
-////Added 20160922
-//IF EARLIER THAN 20161001: STRING('') AS Agency_ID
+////Added 20161005
+//IF EARLIER THAN 20160922: Rate_CA
 CASE WHEN TransactionDate < '2016-09-22' THEN Rate_CA
 ELSE (Rate_CA/1000000)
 END AS Rate_CA,
-////Added 20160922
+////End of Added 20161005
 
 Goal_quantity,
 Line_item_lifetime_impressions,
