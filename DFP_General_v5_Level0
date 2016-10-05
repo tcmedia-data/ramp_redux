@@ -249,7 +249,10 @@ Order_PO_number,
 
 Agency,
 ////Added 20160928
-Agency_ID,
+//IF EARLIER THAN 20161001: STRING('') AS Agency_ID
+CASE WHEN TransactionDate < '2016-10-01' THEN STRING('-')
+ELSE Agency_ID
+END AS Agency_ID,
 ////End of Added 20160928
 
 Trafficker,
