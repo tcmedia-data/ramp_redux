@@ -179,17 +179,29 @@ Ad_Exchange_impressions,
 Ad_Exchange_clicks,
 
 //AD SERVER REVS
-(Ad_server_CPM_and_CPC_revenue_CA/1000000) AS Ad_server_CPM_and_CPC_revenue_CA,
-(Ad_server_CPD_revenue_CA/1000000) AS Ad_server_CPD_revenue_CA,
+CASE WHEN TransactionDate < '2016-09-22' THEN Ad_server_CPM_and_CPC_revenue_CA //Added 20161005
+ELSE (Ad_server_CPM_and_CPC_revenue_CA/1000000) 
+END AS Ad_server_CPM_and_CPC_revenue_CA,
+
+CASE WHEN TransactionDate < '2016-09-22' THEN Ad_server_CPD_revenue_CA //Added 20161005
+ELSE (Ad_server_CPD_revenue_CA/1000000) 
+END AS Ad_server_CPD_revenue_CA,
 
 //ADSENSE REVS
-(AdSense_revenue_CA/1000000) AS AdSense_revenue_CA,
+CASE WHEN TransactionDate < '2016-09-22' THEN AdSense_revenue_CA
+ELSE (AdSense_revenue_CA/1000000) 
+END AS AdSense_revenue_CA,
 
 //ADX REVS
-(Ad_Exchange_revenue_CA/1000000) AS Ad_Exchange_revenue_CA,
+CASE WHEN TransactionDate < '2016-09-22' THEN Ad_Exchange_revenue_CA
+ELSE (Ad_Exchange_revenue_CA/1000000) 
+END AS Ad_Exchange_revenue_CA,
 
 //Total Metrics
-(Total_CPM_and_CPC_revenue_CA/1000000) AS Total_CPM_and_CPC_revenue_CA, 
+CASE WHEN TransactionDate < '2016-09-22' THEN Total_CPM_and_CPC_revenue_CA
+ELSE (Total_CPM_and_CPC_revenue_CA/1000000) 
+END AS Total_CPM_and_CPC_revenue_CA, 
+
 Total_impressions,
 Total_clicks,
 
