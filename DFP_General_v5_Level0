@@ -46,7 +46,9 @@ Order_PO_number,
 
 Agency,
 ////Added 20160928
-Agency_ID,
+CASE WHEN TransactionDate < '2016-10-01' THEN STRING('-')
+ELSE Agency_ID
+END AS Agency_ID,
 ////End of Added 20160928
 
 Trafficker,
@@ -56,7 +58,14 @@ Frequency_cap,
 Line_item_start_date,
 Line_item_end_date,
 Cost_type,
-(Rate_CA/1000000) AS Rate_CA,
+
+////Added 20160922
+//IF EARLIER THAN 20161001: STRING('') AS Agency_ID
+CASE WHEN TransactionDate < '2016-09-22' THEN Rate_CA
+ELSE (Rate_CA/1000000)
+END AS Rate_CA,
+////Added 20160922
+
 Goal_quantity,
 Line_item_lifetime_impressions,
 Line_item_lifetime_clicks,
