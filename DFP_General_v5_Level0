@@ -207,11 +207,13 @@ Total_clicks AS CLICKS_Final,
 //REVS_CPMCPC_Final 
 CASE WHEN LOWER(ImpressionSource) = LOWER('DFP') AND LOWER(Advertiser) LIKE LOWER('%appnexus%remnant%') THEN 0           //AppNexus
 WHEN LOWER(ImpressionSource) = LOWER('DFP') AND LOWER(Advertiser) LIKE LOWER('%appnexus%header%bidding%') THEN 0         //AppNexus
+WHEN TransactionDate < '2016-09-22' THEN Total_CPM_and_CPC_revenue_CA //Added 20161005
 ELSE (Total_CPM_and_CPC_revenue_CA/1000000) END AS REVS_CPMCPC_Final,
 
 //REVS_CPD_Final
 CASE WHEN LOWER(ImpressionSource) = LOWER('DFP') AND LOWER(Advertiser) LIKE LOWER('%appnexus%remnant%') THEN 0           //AppNexus
 WHEN LOWER(ImpressionSource) = LOWER('DFP') AND LOWER(Advertiser) LIKE LOWER('%appnexus%header%bidding%') THEN 0         //AppNexus
+WHEN TransactionDate < '2016-09-22' THEN Ad_server_CPD_revenue_CA //Added 20161005
 ELSE (Ad_server_CPD_revenue_CA/1000000) END AS REVS_CPD_Final
 
 //END OF FINAL METRICS INSTALLED 20160804
