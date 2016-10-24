@@ -1,14 +1,9 @@
-from nexusadspy import AppnexusReport
-import json
-import csv
 import sys, getopt
-
+import sys
+from nexusadspy import AppnexusReport
 
 def formatGoogleDate(axDate):
-    # axDate
-    # '2016-07-31'
-    # google date
-    # 07/26/2016
+    # axDate '2016-07-31' google date # 07/26/2016
     return '/'.join([axDate.split('-')[1], axDate.split('-')[2], axDate.split('-')[0]]).replace('"', '')
 
 
@@ -38,21 +33,14 @@ def buildReport(startDate, endDate, outfile):
                "bid_type",
                "advertiser_currency",
                "publisher_currency",
-               ##---ADDED ADDED 20160914
                "imp_type_id",
-               ##---End of ADDED ADDED 20160914
                "imp_type",
                "campaign_priority",
-               ##---ADDED ADDED 20160914
                "media_type_id",
-               ##---End of ADDED ADDED 20160914
                "media_type",
                "line_item_type",
                "payment_type",
                "revenue_type",
-               ## REMOVED 20160914
-               ##"pub_rule_id",
-               ## End of REMOVED 20160914
                "pub_rule_name",
                "imps",
                "clicks",
@@ -68,7 +56,8 @@ def buildReport(startDate, endDate, outfile):
                             columns=columns,
                             timezone='UTC')
     output_json = report.get()
-    output = open(outfile, 'w', newline='')
+    
+    output = open(outfile, 'w')
     output.write(';'.join(columns) + '\n')
     for row in output_json:
         row['"publisher_name"'] = cleanPublisherName(row['"publisher_name"'])
@@ -106,8 +95,6 @@ def buildReport(startDate, endDate, outfile):
                + SEMI + row['"clicks"'] \
                + SEMI + row['"total_convs"'] \
                + SEMI + row['"revenue"']
-
-
         output.write(line.replace('"', ''))
         output.write('\n')
         output.flush()
@@ -133,12 +120,12 @@ def main(argv):
         elif opt in ("-e", "--edate"):
             enddate = arg
 
-    #outfile = '/Users/tweediej/upload/APPNEXUS_NETWORK_20160921.csv'
-    #startdate = '2016-09-21'
-    #enddate = '2016-09-22'
+    # outfile = '/Users/tweediej/upload/APPNEXUS_NETWORK_20161001.csv'
+    # startdate = '2016-10-01'
+    # enddate = '2016-10-02'
 
     buildReport(startdate, enddate, outfile)
-
+    return('done with file created' )
 
 if __name__ == "__main__":
     main(sys.argv[1:])
