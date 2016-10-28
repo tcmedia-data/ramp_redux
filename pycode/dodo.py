@@ -1,21 +1,26 @@
+  GNU nano 2.5.3                                           File: dodo.py                                                                                              
+
 # automatic_variables.py
-start_date = '2016-10-20'
-end_date = '2016-10-21'
+start_date = '2016-10-26'
+end_date = '2016-10-27'
 suffix = start_date.replace('-','')
-file_location = '/Users/tweediej/upload/'
+file_location = '/opt/tc.media/data/'
+code_location = '/opt/tc.media/code/ramp_redux/pycode/'
 
 def task_run_dfp_general_report():
     """Runs the daily dfp report"""
     return {
-        'actions': ['python ./code/dfp_general_report.py  -o' + file_location + ' -s' + start_date ],
+        'actions': ['python '+ code_location +'dfp_general_report.py  -o' + file_location + ' -s' + start_date ],
         'targets': ['DFP_General_'+ suffix + '.csv'],
     }
 
 def task_run_appnexus_report():
     """Runs the appnexus report for the day """
     return{
-        'actions': ['python3 ./code/appnexus_daily_report.py -o'+file_location +'APPNEXUS_NETWORK_'+ suffix+ '.csv -s'+start_date+' -e'+end_date],
+        'actions': ['python3 '+code_location +'appnexus_daily_report.py -o'+file_location +'APPNEXUS_NETWORK_'+ suffix+ '.csv -s'+start_date+' -e'+end_date],
         'targets': ['gs://managed_services/APPNEXUS_NETWORK_'+suffix +'.csv'],
+    }
+
     }
 
 def task_upload_dfp_to_GCS(): 
