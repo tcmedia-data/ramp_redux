@@ -1,5 +1,3 @@
-  GNU nano 2.5.3                                           File: dodo.py                                                                                              
-
 # automatic_variables.py
 start_date = '2016-10-26'
 end_date = '2016-10-27'
