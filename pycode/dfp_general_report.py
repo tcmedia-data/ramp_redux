@@ -89,7 +89,11 @@ def getReport(startdate ,outfile):
 
     }
     # Initialize a DataDownloader.
-    report_downloader = client.GetDataDownloader(version='v201605')
+    # report_downloader = client.GetDataDownloader(version='v201605') # OLD 2016
+    
+    report_downloader = client.GetDataDownloader(version='v201805') 
+    # FG 20180604 FROM https://developers.google.com/doubleclick-publishers/docs/deprecation
+    
     try:
         print ('starting job for ' + str(start_date.date()))
         # Run the report and wait for it to finish.
